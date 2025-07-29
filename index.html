@@ -49,60 +49,75 @@
             max-width: 600px; /* Optional max-width for larger screens */
             margin: 0 auto; /* Center the chart */
         }
+        /* Refined active navigation link style */
+        .nav-link.active-link {
+            background-color: #2563eb; /* bg-blue-600 */
+            color: #ffffff; /* text-white */
+            font-weight: 600; /* semibold */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* subtle shadow */
+        }
+        /* Subtle hover effect for cards */
+        .card-hover-effect {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
-<body class="flex flex-col md:flex-row min-h-screen bg-gray-50 text-gray-700">
+<body class="flex flex-col md:flex-row min-h-screen bg-gray-50 text-gray-800">
 
     <!-- Message Modal -->
     <div id="messageModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full text-center transform transition-all duration-300 ease-out scale-95 opacity-0" id="modalContent">
             <p id="modalMessage" class="text-gray-900 text-lg font-semibold mb-4"></p>
-            <button id="modalCloseButton" class="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors">OK</button>
+            <button id="modalCloseButton" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-md">OK</button>
         </div>
     </div>
 
     <!-- Sidebar Navigation (Desktop) / Bottom Navigation (Mobile) -->
     <nav class="sidebar-nav bg-gray-100 md:w-64 p-4 flex flex-col md:flex-col items-center shadow-lg md:shadow-none md:border-r border-gray-200">
         <div class="mb-8 md:mb-12 text-center md:text-left w-full">
-            <h1 class="text-2xl font-bold text-gray-900">Compatify</h1>
+            <h1 class="text-3xl font-bold text-gray-900 mb-1">Compatify</h1>
             <p class="text-sm text-gray-500">Future-Proof Your Devices</p>
         </div>
         <ul class="flex md:flex-col gap-2 md:gap-3 w-full">
             <li>
-                <a href="#home" class="nav-link flex items-center gap-3 p-3 rounded-md hover:bg-gray-200 transition-colors active-link">
-                    <span class="text-lg">🏠</span> <span class="hidden md:inline">Home</span>
+                <a href="#home" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors active-link">
+                    <span class="text-xl">🌐</span> <span class="hidden md:inline text-base">Home</span>
                 </a>
             </li>
             <li>
-                <a href="#checker" class="nav-link flex items-center gap-3 p-3 rounded-md hover:bg-gray-200 transition-colors">
-                    <span class="text-lg">⚙️</span> <span class="hidden md:inline">Compatibility Checker</span>
+                <a href="#checker" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors">
+                    <span class="text-xl">🔬</span> <span class="hidden md:inline text-base">Compatibility Checker</span>
                 </a>
             </li>
             <li>
-                <a href="#inventory" class="nav-link flex items-center gap-3 p-3 rounded-md hover:bg-gray-200 transition-colors">
-                    <span class="text-lg">📦</span> <span class="hidden md:inline">My Tech Inventory</span>
+                <a href="#inventory" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors">
+                    <span class="text-xl">🗄️</span> <span class="hidden md:inline text-base">My Tech Inventory</span>
                 </a>
             </li>
             <li>
-                <a href="#obsolescence" class="nav-link flex items-center gap-3 p-3 rounded-md hover:bg-gray-200 transition-colors">
-                    <span class="text-lg">📊</span> <span class="hidden md:inline">Obsolescence Report</span>
+                <a href="#obsolescence" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors">
+                    <span class="text-xl">📈</span> <span class="hidden md:inline text-base">Obsolescence Report</span>
                 </a>
             </li>
             <li>
-                <a href="#roadmap" class="nav-link flex items-center gap-3 p-3 rounded-md hover:bg-gray-200 transition-colors">
-                    <span class="text-lg">🗺️</span> <span class="hidden md:inline">Upgrade Roadmap</span>
+                <a href="#roadmap" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors">
+                    <span class="text-xl">🧭</span> <span class="hidden md:inline text-base">Upgrade Roadmap</span>
                 </a>
             </li>
             <li>
-                <a href="#monetization" class="nav-link flex items-center gap-3 p-3 rounded-md hover:bg-gray-200 transition-colors">
-                    <span class="text-lg">💸</span> <span class="hidden md:inline">Monetization</span>
+                <a href="#monetization" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors">
+                    <span class="text-xl">💲</span> <span class="hidden md:inline text-base">Monetization</span>
                 </a>
             </li>
         </ul>
     </nav>
 
     <!-- Main Content Area -->
-    <main id="contentDiv" class="main-content-area flex-1 p-4 md:p-8 overflow-y-auto">
+    <main id="contentDiv" class="main-content-area flex-1 p-6 md:p-10 overflow-y-auto">
         <!-- Content will be dynamically loaded here -->
     </main>
 
@@ -239,7 +254,6 @@
 
         // --- Global State ---
         const userState = {
-            // isPremiumUser, freeChecksUsed, maxFreeChecks removed as all features are now free
             selectedDevicesForCheck: [], // Stores device objects for checker
             userInventory: [], // Stores device objects for all users
             currentSection: 'home',
@@ -252,6 +266,7 @@
         const messageModal = document.getElementById('messageModal');
         const modalMessage = document.getElementById('modalMessage');
         const modalCloseButton = document.getElementById('modalCloseButton');
+        const modalContent = document.getElementById('modalContent'); // Get the modal content div
 
         // --- Utility Functions ---
 
@@ -262,13 +277,22 @@
         function showMessage(message) {
             modalMessage.textContent = message;
             messageModal.classList.remove('hidden');
+            // Add animation classes
+            modalContent.classList.remove('scale-95', 'opacity-0');
+            modalContent.classList.add('scale-100', 'opacity-100');
         }
 
         /**
          * Hides the custom modal message.
          */
         function hideMessage() {
-            modalModal.classList.add('hidden');
+            // Add animation classes for hiding
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            // Hide after animation
+            setTimeout(() => {
+                messageModal.classList.add('hidden');
+            }, 300); // Match transition duration
         }
 
         /**
@@ -307,10 +331,16 @@
             contentDiv.innerHTML = ''; // Clear existing content
 
             // Deactivate all nav links and activate the current one
-            navLinks.forEach(link => link.classList.remove('active-link', 'bg-blue-600', 'text-white'));
+            navLinks.forEach(link => link.classList.remove('active-link')); // Remove custom class
+            navLinks.forEach(link => { // Remove Tailwind classes for active state
+                link.classList.remove('bg-blue-600', 'text-white', 'font-semibold', 'shadow-md');
+                link.classList.add('text-gray-700', 'hover:bg-gray-200'); // Ensure default styles are there
+            });
+
             const activeLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
             if (activeLink) {
-                activeLink.classList.add('active-link', 'bg-blue-600', 'text-white');
+                activeLink.classList.add('active-link', 'bg-blue-600', 'text-white', 'font-semibold', 'shadow-md');
+                activeLink.classList.remove('text-gray-700', 'hover:bg-gray-200'); // Remove default styles for active
             }
 
             // Destroy existing chart instance if any
@@ -324,31 +354,30 @@
                 case 'home':
                     contentDiv.innerHTML = `
                         <div class="flex flex-col items-center justify-center text-center py-16 px-4">
-                            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">Future-Proof Your Tech. Seamlessly Compatible.</h1>
-                            <p class="text-lg md:text-xl text-gray-700 max-w-2xl mb-10">Avoid compatibility headaches, save money, and extend the life of your devices with intelligent insights and personalized recommendations.</p>
-                            <button id="startCompatibilityCheckBtn" class="bg-blue-600 text-white px-8 py-4 rounded-md text-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg mb-12">Start a Compatibility Check</button>
+                            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">Future-Proof Your Tech.<br>Seamlessly Compatible.</h1>
+                            <p class="text-lg md:text-xl text-gray-700 max-w-2xl mb-10 leading-relaxed">Avoid compatibility headaches, save money, and extend the life of your devices with intelligent insights and personalized recommendations.</p>
+                            <button id="startCompatibilityCheckBtn" class="bg-blue-600 text-white px-10 py-4 rounded-xl text-xl font-semibold hover:bg-blue-700 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl transform hover:-translate-y-1 mb-16">Start a Compatibility Check</button>
 
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl w-full">
-                                <div class="bg-gray-100 p-6 rounded-lg shadow-sm flex flex-col items-center text-center">
-                                    <span class="text-4xl mb-4">✅</span>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full">
+                                <div class="bg-gray-100 p-8 rounded-xl shadow-md flex flex-col items-center text-center card-hover-effect">
+                                    <span class="text-5xl mb-4">⏱️</span>
                                     <h3 class="text-xl font-semibold text-gray-900 mb-2">Save Time</h3>
-                                    <p class="text-gray-700">Instantly check device compatibility and avoid frustrating trial-and-error.</p>
+                                    <p class="text-gray-700 leading-relaxed">Instantly check device compatibility and avoid frustrating trial-and-error.</p>
                                 </div>
-                                <div class="bg-gray-100 p-6 rounded-lg shadow-sm flex flex-col items-center text-center">
-                                    <span class="text-4xl mb-4">💰</span>
+                                <div class="bg-gray-100 p-8 rounded-xl shadow-md flex flex-col items-center text-center card-hover-effect">
+                                    <span class="text-5xl mb-4">♻️</span>
                                     <h3 class="text-xl font-semibold text-gray-900 mb-2">Reduce Waste</h3>
-                                    <p class="text-gray-700">Make smarter purchasing decisions and extend the useful life of your devices.</p>
+                                    <p class="text-gray-700 leading-relaxed">Make smarter purchasing decisions and extend the useful life of your devices.</p>
                                 </div>
-                                <div class="bg-gray-100 p-6 rounded-lg shadow-sm flex flex-col items-center text-center">
-                                    <span class="text-4xl mb-4">💡</span>
+                                <div class="bg-gray-100 p-8 rounded-xl shadow-md flex flex-col items-center text-center card-hover-effect">
+                                    <span class="text-5xl mb-4">🚀</span>
                                     <h3 class="text-xl font-semibold text-gray-900 mb-2">Stay Updated</h3>
-                                    <p class="text-gray-700">Understand future tech trends and plan your upgrades strategically.</p>
+                                    <p class="text-gray-700 leading-relaxed">Understand future tech trends and plan your upgrades strategically.</p>
                                 </div>
                             </div>
                         </div>
                     `;
                     document.getElementById('startCompatibilityCheckBtn').addEventListener('click', () => {
-                        // Smooth scroll to checker section
                         renderSection('checker');
                         contentDiv.scrollIntoView({ behavior: 'smooth' });
                     });
@@ -356,84 +385,83 @@
 
                 case 'checker':
                     contentDiv.innerHTML = `
-                        <div class="max-w-4xl mx-auto px-4 py-8">
-                            <h2 class="text-3xl font-bold text-gray-900 mb-6">Compatibility Checker</h2>
-                            <p class="text-lg text-gray-700 mb-8">Select your existing device and a new device you're considering to check their compatibility.</p>
+                        <div class="max-w-5xl mx-auto px-4 py-8">
+                            <h2 class="text-3xl font-bold text-gray-900 mb-8">Compatibility Checker</h2>
+                            <p class="text-lg text-gray-700 mb-10">Select your existing device and a new device you're considering to check their compatibility.</p>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
                                 <!-- Existing Device Form -->
-                                <div class="bg-gray-100 p-6 rounded-lg shadow-sm">
-                                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Existing Device</h3>
-                                    <form id="existingDeviceForm" class="space-y-4">
+                                <div class="bg-gray-100 p-8 rounded-xl shadow-md">
+                                    <h3 class="text-2xl font-semibold text-gray-900 mb-5">Existing Device</h3>
+                                    <form id="existingDeviceForm" class="space-y-5">
                                         <div>
-                                            <label for="existingDeviceType" class="block text-sm font-medium text-gray-900">Device Type</label>
-                                            <select id="existingDeviceType" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
+                                            <label for="existingDeviceType" class="block text-sm font-medium text-gray-900 mb-1">Device Type</label>
+                                            <select id="existingDeviceType" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                                 <option value="">Select Type</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label for="existingDeviceBrand" class="block text-sm font-medium text-gray-900">Brand</label>
-                                            <select id="existingDeviceBrand" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
+                                            <label for="existingDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1">Brand</label>
+                                            <select id="existingDeviceBrand" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                                 <option value="">Select Brand</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label for="existingDeviceModel" class="block text-sm font-medium text-gray-900">Model (Optional)</label>
-                                            <input type="text" id="existingDeviceModel" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                            <label for="existingDeviceModel" class="block text-sm font-medium text-gray-900 mb-1">Model (Optional)</label>
+                                            <input type="text" id="existingDeviceModel" placeholder="e.g., MacBook Air M2" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-900 mb-2">Key Connectivity/Features</label>
-                                            <div id="existingConnectivityCheckboxes" class="grid grid-cols-2 gap-2 text-sm">
+                                            <div id="existingConnectivityCheckboxes" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                                                 <!-- Checkboxes will be populated here -->
                                             </div>
                                         </div>
-                                        <button type="button" id="addExistingDeviceBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors w-full">Add Existing Device</button>
+                                        <button type="button" id="addExistingDeviceBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 ease-in-out w-full shadow-md">Add Existing Device</button>
                                     </form>
                                 </div>
 
                                 <!-- New Device Form -->
-                                <div class="bg-gray-100 p-6 rounded-lg shadow-sm">
-                                    <h3 class="text-xl font-semibold text-gray-900 mb-4">New Device (Considering)</h3>
-                                    <form id="newDeviceForm" class="space-y-4">
+                                <div class="bg-gray-100 p-8 rounded-xl shadow-md">
+                                    <h3 class="text-2xl font-semibold text-gray-900 mb-5">New Device (Considering)</h3>
+                                    <form id="newDeviceForm" class="space-y-5">
                                         <div>
-                                            <label for="newDeviceType" class="block text-sm font-medium text-gray-900">Device Type</label>
-                                            <select id="newDeviceType" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
+                                            <label for="newDeviceType" class="block text-sm font-medium text-gray-900 mb-1">Device Type</label>
+                                            <select id="newDeviceType" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                                 <option value="">Select Type</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label for="newDeviceBrand" class="block text-sm font-medium text-gray-900">Brand</label>
-                                            <select id="newDeviceBrand" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
+                                            <label for="newDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1">Brand</label>
+                                            <select id="newDeviceBrand" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                                 <option value="">Select Brand</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label for="newDeviceModel" class="block text-sm font-medium text-gray-900">Model (Optional)</label>
-                                            <input type="text" id="newDeviceModel" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                            <label for="newDeviceModel" class="block text-sm font-medium text-gray-900 mb-1">Model (Optional)</label>
+                                            <input type="text" id="newDeviceModel" placeholder="e.g., Studio Display" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-900 mb-2">Key Connectivity/Features</label>
-                                            <div id="newConnectivityCheckboxes" class="grid grid-cols-2 gap-2 text-sm">
+                                            <div id="newConnectivityCheckboxes" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                                                 <!-- Checkboxes will be populated here -->
                                             </div>
                                         </div>
-                                        <button type="button" id="addNewDeviceBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors w-full">Add New Device</button>
+                                        <button type="button" id="addNewDeviceBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 ease-in-out w-full shadow-md">Add New Device</button>
                                     </form>
                                 </div>
                             </div>
 
-                            <div class="mb-8">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Devices for Comparison:</h3>
-                                <div id="selectedDevicesDisplay" class="flex flex-wrap gap-3 mb-4">
+                            <div class="mb-10 p-6 bg-white rounded-xl shadow-md">
+                                <h3 class="text-2xl font-semibold text-gray-900 mb-5">Devices for Comparison:</h3>
+                                <div id="selectedDevicesDisplay" class="flex flex-wrap gap-4 mb-6">
                                     <!-- Selected devices will be displayed here -->
                                     <p class="text-gray-500" id="noDevicesSelectedMessage">No devices selected yet.</p>
                                 </div>
-                                <!-- Free tier limits and counters removed -->
-                                <button id="runCompatibilityCheckBtn" class="bg-blue-600 text-white px-6 py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors w-full md:w-auto">Run Compatibility Check</button>
+                                <button id="runCompatibilityCheckBtn" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors duration-300 ease-in-out w-full md:w-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">Run Compatibility Check</button>
                             </div>
 
-                            <div id="resultsDisplayArea" class="bg-gray-100 p-6 rounded-lg shadow-sm min-h-[200px] flex items-center justify-center text-center">
-                                <p class="text-gray-500">Compatibility results will appear here after you run a check.</p>
+                            <div id="resultsDisplayArea" class="bg-gray-100 p-8 rounded-xl shadow-md min-h-[250px] flex items-center justify-center text-center">
+                                <p class="text-gray-500 text-lg">Compatibility results will appear here after you run a check.</p>
                             </div>
                         </div>
                     `;
@@ -447,46 +475,46 @@
 
                 case 'inventory':
                     contentDiv.innerHTML = `
-                        <div class="max-w-4xl mx-auto px-4 py-8">
-                            <h2 class="text-3xl font-bold text-gray-900 mb-6">My Tech Inventory</h2>
-                            <p class="text-lg text-gray-700 mb-8">Manage your personal tech ecosystem. Add your devices to get a holistic view of their compatibility and future-proofing.</p>
+                        <div class="max-w-5xl mx-auto px-4 py-8">
+                            <h2 class="text-3xl font-bold text-gray-900 mb-8">My Tech Inventory</h2>
+                            <p class="text-lg text-gray-700 mb-10">Manage your personal tech ecosystem. Add your devices to get a holistic view of their compatibility and future-proofing.</p>
 
-                            <button id="addNewDeviceToInventoryBtn" class="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors mb-6">Add New Device to Inventory</button>
+                            <button id="addNewDeviceToInventoryBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 ease-in-out mb-8 shadow-md">Add New Device to Inventory</button>
 
                             <div id="userInventoryList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 <!-- User's devices will be listed here -->
-                                ${userState.userInventory.length === 0 ? '<p class="text-gray-500 col-span-full">Your inventory is empty. Add your first device!</p>' : ''}
+                                ${userState.userInventory.length === 0 ? '<p class="text-gray-500 col-span-full text-lg">Your inventory is empty. Add your first device!</p>' : ''}
                             </div>
 
                             <!-- Device Input Form (hidden by default, shown when adding/editing) -->
-                            <div id="inventoryDeviceFormContainer" class="hidden bg-gray-100 p-6 rounded-lg shadow-sm mt-8">
-                                <h3 id="inventoryFormTitle" class="text-xl font-semibold text-gray-900 mb-4">Add New Device</h3>
-                                <form id="inventoryDeviceForm" class="space-y-4">
+                            <div id="inventoryDeviceFormContainer" class="hidden bg-gray-100 p-8 rounded-xl shadow-md mt-10">
+                                <h3 id="inventoryFormTitle" class="text-2xl font-semibold text-gray-900 mb-5">Add New Device</h3>
+                                <form id="inventoryDeviceForm" class="space-y-5">
                                     <input type="hidden" id="inventoryDeviceId">
                                     <div>
-                                        <label for="inventoryDeviceType" class="block text-sm font-medium text-gray-900">Device Type</label>
-                                        <select id="inventoryDeviceType" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
+                                        <label for="inventoryDeviceType" class="block text-sm font-medium text-gray-900 mb-1">Device Type</label>
+                                        <select id="inventoryDeviceType" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                             <option value="">Select Type</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label for="inventoryDeviceBrand" class="block text-sm font-medium text-gray-900">Brand</label>
-                                        <select id="inventoryDeviceBrand" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
+                                        <label for="inventoryDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1">Brand</label>
+                                        <select id="inventoryDeviceBrand" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                             <option value="">Select Brand</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label for="inventoryDeviceModel" class="block text-sm font-medium text-gray-900">Model (Optional)</label>
-                                        <input type="text" id="inventoryDeviceModel" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <label for="inventoryDeviceModel" class="block text-sm font-medium text-gray-900 mb-1">Model (Optional)</label>
+                                        <input type="text" id="inventoryDeviceModel" placeholder="e.g., iPhone 15 Pro" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-900 mb-2">Key Connectivity/Features</label>
-                                        <div id="inventoryConnectivityCheckboxes" class="grid grid-cols-2 gap-2 text-sm">
+                                        <div id="inventoryConnectivityCheckboxes" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                                             <!-- Checkboxes will be populated here -->
                                         </div>
                                     </div>
-                                    <button type="button" id="saveInventoryDeviceBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors w-full">Save Device</button>
-                                    <button type="button" id="cancelInventoryDeviceBtn" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400 transition-colors w-full mt-2">Cancel</button>
+                                    <button type="button" id="saveInventoryDeviceBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 ease-in-out w-full shadow-md">Save Device</button>
+                                    <button type="button" id="cancelInventoryDeviceBtn" class="bg-gray-300 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-400 transition-colors duration-300 ease-in-out w-full mt-3 shadow-md">Cancel</button>
                                 </form>
                             </div>
                         </div>
@@ -501,37 +529,37 @@
 
                 case 'obsolescence':
                     contentDiv.innerHTML = `
-                        <div class="max-w-4xl mx-auto px-4 py-8">
-                            <h2 class="text-3xl font-bold text-gray-900 mb-6">Obsolescence Report</h2>
-                            <p class="text-lg text-gray-700 mb-8">Assess the longevity of your devices and identify potential obsolescence risks based on current and emerging industry standards.</p>
+                        <div class="max-w-5xl mx-auto px-4 py-8">
+                            <h2 class="text-3xl font-bold text-gray-900 mb-8">Obsolescence Report</h2>
+                            <p class="text-lg text-gray-700 mb-10">Assess the longevity of your devices and identify potential obsolescence risks based on current and emerging industry standards.</p>
 
-                            <div class="mb-6">
-                                <label for="obsolescenceDeviceSelector" class="block text-sm font-medium text-gray-900">Select Device from Inventory:</label>
-                                <select id="obsolescenceDeviceSelector" class="mt-1 block w-full md:w-1/2 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
+                            <div class="mb-8 p-6 bg-white rounded-xl shadow-md">
+                                <label for="obsolescenceDeviceSelector" class="block text-lg font-medium text-gray-900 mb-2">Select Device from Inventory:</label>
+                                <select id="obsolescenceDeviceSelector" class="mt-1 block w-full md:w-1/2 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                     <option value="">-- Select a Device --</option>
                                     ${userState.userInventory.map(device => `<option value="${device.id}">${device.brand} ${device.model || device.type}</option>`).join('')}
                                 </select>
-                                ${userState.userInventory.length === 0 ? '<p class="text-sm text-red-600 mt-2">No devices in your inventory. Add devices in "My Tech Inventory" to generate reports.</p>' : ''}
+                                ${userState.userInventory.length === 0 ? '<p class="text-sm text-red-600 mt-3">No devices in your inventory. Add devices in "My Tech Inventory" to generate reports.</p>' : ''}
                             </div>
 
-                            <div id="obsolescenceReportContent" class="hidden bg-gray-100 p-6 rounded-lg shadow-sm">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Future-Proofing Score:</h3>
-                                <div class="chart-container mb-6">
+                            <div id="obsolescenceReportContent" class="hidden bg-gray-100 p-8 rounded-xl shadow-md">
+                                <h3 class="text-2xl font-semibold text-gray-900 mb-5">Future-Proofing Score:</h3>
+                                <div class="chart-container mb-8">
                                     <canvas id="obsolescenceChart"></canvas>
                                 </div>
-                                <p id="obsolescenceScoreText" class="text-4xl font-bold text-gray-900 text-center mb-6"></p>
+                                <p id="obsolescenceScoreText" class="text-5xl font-extrabold text-gray-900 text-center mb-8"></p>
 
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Breakdown of Factors:</h3>
-                                <div id="obsolescenceFactorsList" class="space-y-3 mb-8">
+                                <h3 class="text-2xl font-semibold text-gray-900 mb-5">Breakdown of Factors:</h3>
+                                <div id="obsolescenceFactorsList" class="space-y-4 mb-10">
                                     <!-- Factors will be listed here -->
                                 </div>
 
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Suggested Upgrades for Longevity:</h3>
-                                <ul id="recommendedUpgradesList" class="list-disc list-inside space-y-2">
+                                <h3 class="text-2xl font-semibold text-gray-900 mb-5">Suggested Upgrades for Longevity:</h3>
+                                <ul id="recommendedUpgradesList" class="list-disc list-inside space-y-3 pl-5">
                                     <!-- Recommendations will be listed here -->
                                 </ul>
                             </div>
-                            <p id="obsolescencePlaceholder" class="text-gray-500 text-center mt-8 ${userState.userInventory.length > 0 ? '' : 'hidden'}">Select a device above to view its obsolescence report.</p>
+                            <p id="obsolescencePlaceholder" class="text-gray-500 text-center text-lg mt-8 ${userState.userInventory.length > 0 ? '' : 'hidden'}">Select a device above to view its obsolescence report.</p>
                         </div>
                     `;
                     document.getElementById('obsolescenceDeviceSelector').addEventListener('change', (event) => {
@@ -549,13 +577,13 @@
 
                 case 'roadmap':
                     contentDiv.innerHTML = `
-                        <div class="max-w-4xl mx-auto px-4 py-8">
-                            <h2 class="text-3xl font-bold text-gray-900 mb-6">Upgrade Roadmap</h2>
-                            <p class="text-lg text-gray-700 mb-8">Your personalized, step-by-step guide to a truly future-proof tech ecosystem. Plan your upgrades strategically.</p>
+                        <div class="max-w-5xl mx-auto px-4 py-8">
+                            <h2 class="text-3xl font-bold text-gray-900 mb-8">Upgrade Roadmap</h2>
+                            <p class="text-lg text-gray-700 mb-10">Your personalized, step-by-step guide to a truly future-proof tech ecosystem. Plan your upgrades strategically.</p>
 
-                            <div class="mb-6">
-                                <label for="roadmapGoalSelector" class="block text-sm font-medium text-gray-900">Select a Goal or Device:</label>
-                                <select id="roadmapGoalSelector" class="mt-1 block w-full md:w-1/2 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
+                            <div class="mb-8 p-6 bg-white rounded-xl shadow-md">
+                                <label for="roadmapGoalSelector" class="block text-lg font-medium text-gray-900 mb-2">Select a Goal or Device:</label>
+                                <select id="roadmapGoalSelector" class="mt-1 block w-full md:w-1/2 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                     <option value="">-- Select a Goal --</option>
                                     <option value="general-laptop">Upgrade My Laptop Setup</option>
                                     <option value="general-smart-home">Build a Smart Home</option>
@@ -564,13 +592,13 @@
                                 </select>
                             </div>
 
-                            <div id="roadmapDisplayArea" class="hidden bg-gray-100 p-6 rounded-lg shadow-sm">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Your Personalized Roadmap:</h3>
+                            <div id="roadmapDisplayArea" class="hidden bg-gray-100 p-8 rounded-xl shadow-md">
+                                <h3 class="text-2xl font-semibold text-gray-900 mb-5">Your Personalized Roadmap:</h3>
                                 <div id="roadmapSteps" class="space-y-6">
                                     <!-- Roadmap steps will be generated here -->
                                 </div>
                             </div>
-                            <p id="roadmapPlaceholder" class="text-gray-500 text-center mt-8">Select a goal or device above to generate your upgrade roadmap.</p>
+                            <p id="roadmapPlaceholder" class="text-gray-500 text-center text-lg mt-8">Select a goal or device above to generate your upgrade roadmap.</p>
                         </div>
                     `;
                     document.getElementById('roadmapGoalSelector').addEventListener('change', (event) => {
@@ -588,31 +616,31 @@
 
                 case 'monetization': // Renamed from 'pricing'
                     contentDiv.innerHTML = `
-                        <div class="max-w-4xl mx-auto px-4 py-8 text-center">
-                            <h2 class="text-3xl font-bold text-gray-900 mb-6">How Compatify is Supported</h2>
-                            <p class="text-lg text-gray-700 mb-10">Compatify offers all its powerful features completely free of charge to help everyone make smarter tech decisions.</p>
+                        <div class="max-w-5xl mx-auto px-4 py-8 text-center">
+                            <h2 class="text-3xl font-bold text-gray-900 mb-8">How Compatify is Supported</h2>
+                            <p class="text-lg text-gray-700 mb-10 leading-relaxed">Compatify offers all its powerful features completely free of charge to help everyone make smarter tech decisions.</p>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <!-- Ad-Supported Explanation -->
-                                <div class="bg-gray-100 p-8 rounded-lg shadow-lg flex flex-col items-center border border-gray-200">
+                                <div class="bg-gray-100 p-8 rounded-xl shadow-md flex flex-col items-center border border-gray-200 card-hover-effect">
                                     <h3 class="text-2xl font-bold text-gray-900 mb-4">Ad-Supported Model</h3>
-                                    <p class="text-gray-700 mb-6">To keep Compatify free and accessible, we display relevant advertisements on our site. These ads help cover our operational costs and allow us to continue developing valuable tools for you.</p>
-                                    <ul class="text-left space-y-3 text-gray-700 mb-8 flex-grow">
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> All features are free</li>
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> No paywalls, no subscriptions</li>
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Supports ongoing development</li>
+                                    <p class="text-gray-700 mb-6 leading-relaxed">To keep Compatify free and accessible, we display relevant advertisements on our site. These ads help cover our operational costs and allow us to continue developing valuable tools for you.</p>
+                                    <ul class="text-left space-y-3 text-gray-700 mb-8 flex-grow w-full">
+                                        <li class="flex items-center"><span class="text-green-600 text-xl mr-2">✔️</span> All features are free</li>
+                                        <li class="flex items-center"><span class="text-green-600 text-xl mr-2">✔️</span> No paywalls, no subscriptions</li>
+                                        <li class="flex items-center"><span class="text-green-600 text-xl mr-2">✔️</span> Supports ongoing development</li>
                                     </ul>
                                     <p class="text-sm text-gray-500 mt-auto">Thank you for your understanding and support!</p>
                                 </div>
 
                                 <!-- Affiliate Links / Future Support -->
-                                <div class="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center border-2 border-blue-600 relative">
+                                <div class="bg-white p-8 rounded-xl shadow-md flex flex-col items-center border-2 border-blue-600 relative card-hover-effect">
                                     <h3 class="text-2xl font-bold text-gray-900 mb-4">Affiliate & Future Support</h3>
-                                    <p class="text-gray-700 mb-6">We may also include affiliate links in our recommendations. If you make a purchase through these links, we may earn a small commission at no extra cost to you. This is another way you can support Compatify!</p>
-                                    <ul class="text-left space-y-3 text-gray-700 mb-8 flex-grow">
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Unbiased product recommendations</li>
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Direct support for Compatify</li>
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Helps us keep the lights on</li>
+                                    <p class="text-gray-700 mb-6 leading-relaxed">We may also include affiliate links in our recommendations. If you make a purchase through these links, we may earn a small commission at no extra cost to you. This is another way you can support Compatify!</p>
+                                    <ul class="text-left space-y-3 text-gray-700 mb-8 flex-grow w-full">
+                                        <li class="flex items-center"><span class="text-green-600 text-xl mr-2">✔️</span> Unbiased product recommendations</li>
+                                        <li class="flex items-center"><span class="text-green-600 text-xl mr-2">✔️</span> Direct support for Compatify</li>
+                                        <li class="flex items-center"><span class="text-green-600 text-xl mr-2">✔️</span> Helps us keep the lights on</li>
                                     </ul>
                                     <p class="text-sm text-gray-500 mt-auto">Your trust is our priority. We only recommend products we believe in.</p>
                                 </div>
@@ -723,12 +751,6 @@
                 tempId: `${selectedDevice.id}-${type}-${Date.now()}`
             };
 
-            // No free tier limits anymore
-            // if (!userState.isPremiumUser && userState.selectedDevicesForCheck.length >= userState.maxFreeChecks - 1) {
-            //     showMessage(`Free users can compare up to ${userState.maxFreeChecks} devices at a time. Upgrade to Premium for unlimited comparisons.`);
-            //     return;
-            // }
-
             // Prevent adding the same device twice for comparison (based on tempId)
             if (userState.selectedDevicesForCheck.some(d => d.tempId === selectedDevice.tempId)) {
                 showMessage('This device is already added for comparison.');
@@ -761,10 +783,10 @@
                 noDevicesMessage.classList.add('hidden');
                 userState.selectedDevicesForCheck.forEach(device => {
                     const deviceCard = document.createElement('div');
-                    deviceCard.className = 'flex items-center bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm font-medium';
+                    deviceCard.className = 'flex items-center bg-blue-50 text-blue-800 px-4 py-2 rounded-full text-base font-medium shadow-sm';
                     deviceCard.innerHTML = `
                         <span>${device.brand} ${device.model || device.type}</span>
-                        <button type="button" data-device-id="${device.tempId}" class="remove-device-btn ml-2 text-blue-600 hover:text-blue-800 focus:outline-none">❌</button>
+                        <button type="button" data-device-id="${device.tempId}" class="remove-device-btn ml-2 text-blue-600 hover:text-blue-800 focus:outline-none transition-colors duration-200">✖️</button>
                     `;
                     displayArea.appendChild(deviceCard);
                 });
@@ -794,28 +816,15 @@
             const resultsDisplayArea = document.getElementById('resultsDisplayArea');
             resultsDisplayArea.innerHTML = ''; // Clear previous results
 
-            // No free tier limits anymore
-            // if (!userState.isPremiumUser && userState.freeChecksUsed >= userState.maxFreeChecks) {
-            //     resultsDisplayArea.innerHTML = `
-            //         <div class="text-center text-red-600">
-            //             <p class="text-xl font-semibold mb-4">Daily Free Check Limit Reached!</p>
-            //             <p class="mb-4">You have used all ${userState.maxFreeChecks} free checks for today.</p>
-            //             <button id="upgradeForMoreChecksBtn" class="bg-blue-600 text-white px-6 py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg">Upgrade to Premium for Unlimited Checks</button>
-            //         </div>
-            //     `;
-            //     document.getElementById('upgradeForMoreChecksBtn').addEventListener('click', () => renderSection('pricing'));
-            //     return;
-            // }
-
             if (userState.selectedDevicesForCheck.length < 2) {
-                resultsDisplayArea.innerHTML = '<p class="text-red-600">Please select two devices to run a compatibility check.</p>';
+                resultsDisplayArea.innerHTML = '<p class="text-red-600 font-semibold">Please select two devices to run a compatibility check.</p>';
                 return;
             }
 
             const device1 = userState.selectedDevicesForCheck[0];
             const device2 = userState.selectedDevicesForCheck[1];
 
-            let compatibilityStatus = '✅ Compatible!';
+            let compatibilityStatus = '✔️ Compatible!';
             let compatibilityColor = 'text-green-600';
             const matchingFeatures = [];
             const incompatibleFeatures = [];
@@ -833,16 +842,16 @@
                     if (port1.includes('USB-C') && (device2Ports.has('HDMI') || device2Ports.has('DisplayPort'))) {
                         incompatibleFeatures.push(`${device1.brand} ${device1.model || device1.type} has ${port1}, but ${device2.brand} ${device2.model || device2.type} requires HDMI/DisplayPort.`);
                         recommendations.push(`Recommended: USB-C to HDMI/DisplayPort Adapter (Active)`);
-                        compatibilityStatus = '⚠️ Compatible with adapter';
+                        compatibilityStatus = '🔀 Compatible with adapter';
                         compatibilityColor = 'text-orange-600';
                     } else if (port1.includes('USB-A') && device2Ports.has('USB-C')) {
                         incompatibleFeatures.push(`${device1.brand} ${device1.model || device1.type} has ${port1}, but ${device2.brand} ${device2.model || device2.type} primarily uses USB-C.`);
                         recommendations.push(`Recommended: USB-A to USB-C adapter/cable.`);
-                        compatibilityStatus = '⚠️ Compatible with adapter';
+                        compatibilityStatus = '🔀 Compatible with adapter';
                         compatibilityColor = 'text-orange-600';
                     } else {
                         incompatibleFeatures.push(`${device1.brand} ${device1.model || device1.type} has ${port1}, but ${device2.brand} ${device2.model || device2.type} does not.`);
-                        compatibilityStatus = '❌ Incompatible!';
+                        compatibilityStatus = '✖️ Incompatible!';
                         compatibilityColor = 'text-red-600';
                     }
                 }
@@ -854,7 +863,7 @@
                     if (!(port2.includes('USB-C') && (device1Ports.has('HDMI') || device1Ports.has('DisplayPort'))) &&
                         !(port2.includes('USB-A') && device1Ports.has('USB-C'))) {
                         incompatibleFeatures.push(`${device2.brand} ${device2.model || device2.type} has ${port2}, but ${device1.brand} ${device1.model || device1.type} does not.`);
-                        compatibilityStatus = '❌ Incompatible!';
+                        compatibilityStatus = '✖️ Incompatible!';
                         compatibilityColor = 'text-red-600';
                     }
                 }
@@ -881,8 +890,8 @@
             if (matchingFeatures.length > 0) {
                 reportHtml += `
                     <h4 class="text-xl font-semibold text-gray-900 mb-3">Matching Features:</h4>
-                    <ul class="list-disc list-inside space-y-2 mb-6">
-                        ${matchingFeatures.map(f => `<li class="text-green-700">✅ ${f}</li>`).join('')}
+                    <ul class="list-disc list-inside space-y-2 mb-6 pl-5">
+                        ${matchingFeatures.map(f => `<li class="text-green-700">✔️ ${f}</li>`).join('')}
                     </ul>
                 `;
             }
@@ -890,8 +899,8 @@
             if (incompatibleFeatures.length > 0) {
                 reportHtml += `
                     <h4 class="text-xl font-semibold text-gray-900 mb-3">Incompatibilities Found:</h4>
-                    <ul class="list-disc list-inside space-y-2 mb-6">
-                        ${incompatibleFeatures.map(f => `<li class="text-red-700">❌ ${f}</li>`).join('')}
+                    <ul class="list-disc list-inside space-y-2 mb-6 pl-5">
+                        ${incompatibleFeatures.map(f => `<li class="text-red-700">✖️ ${f}</li>`).join('')}
                     </ul>
                 `;
             } else if (matchingFeatures.length === 0) {
@@ -904,36 +913,13 @@
             if (recommendations.length > 0) {
                 reportHtml += `
                     <h4 class="text-xl font-semibold text-gray-900 mb-3">Suggested Adapters/Cables:</h4>
-                    <ul class="list-disc list-inside space-y-2 mb-6">
+                    <ul class="list-disc list-inside space-y-2 mb-6 pl-5">
                         ${recommendations.map(r => `<li class="text-blue-700">💡 ${r}</li>`).join('')}
                     </ul>
                 `;
             }
 
-            // Premium feature lock within results removed
-            // const advancedScenariosDetected = (device1.notes && device1.notes.includes('driver')) || (device2.notes && device2.notes.includes('driver'));
-            // if (!userState.isPremiumUser && advancedScenariosDetected) {
-            //     reportHtml += `
-            //         <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-md mt-6">
-            //             <p class="font-bold">Unlock Advanced Insights!</p>
-            //             <p class="text-sm">This check involved advanced scenarios (e.g., specific driver versions, complex ecosystem integration) that are premium-only. Upgrade to Premium for deeper analysis!</p>
-            //             <button id="upgradeAdvancedBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors mt-3">Upgrade to Premium</button>
-            //         </div>
-            //     `;
-            // }
-
-
             resultsDisplayArea.innerHTML = reportHtml;
-
-            // Free checks counter removed
-            // if (!userState.isPremiumUser) {
-            //     userState.freeChecksUsed++;
-            //     document.getElementById('freeChecksCounter').textContent = `Checks remaining today: ${userState.maxFreeChecks - userState.freeChecksUsed}/${userState.maxFreeChecks}`;
-            // }
-
-            // if (advancedScenariosDetected && !userState.isPremiumUser) {
-            //     document.getElementById('upgradeAdvancedBtn').addEventListener('click', () => renderSection('pricing'));
-            // }
         }
 
         // --- My Tech Inventory Functions (All Users) ---
@@ -972,7 +958,7 @@
                         div.className = 'flex items-center';
                         const isChecked = selectedValues.includes(option);
                         div.innerHTML = `
-                            <input type="checkbox" id="${containerId}-${option.replace(/\s/g, '-')}" value="${option}" ${isChecked ? 'checked' : ''} class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <input type="checkbox" id="${containerId}-${option.replace(/\s/g, '-')}" value="${option}" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                             <label for="${containerId}-${option.replace(/\s/g, '-')}" class="ml-2 text-gray-700">${option}</label>
                         `;
                         container.appendChild(div);
@@ -1106,22 +1092,22 @@
             inventoryList.innerHTML = ''; // Clear previous display
 
             if (userState.userInventory.length === 0) {
-                inventoryList.innerHTML = '<p class="text-gray-500 col-span-full">Your inventory is empty. Add your first device!</p>';
+                inventoryList.innerHTML = '<p class="text-gray-500 col-span-full text-lg">Your inventory is empty. Add your first device!</p>';
                 return;
             }
 
             userState.userInventory.forEach(device => {
                 const deviceCard = document.createElement('div');
-                deviceCard.className = 'bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col';
+                deviceCard.className = 'bg-gray-100 p-6 rounded-xl shadow-md flex flex-col card-hover-effect';
                 deviceCard.innerHTML = `
-                    <h4 class="text-lg font-semibold text-gray-900 mb-2">${device.brand} ${device.model || device.type}</h4>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">${device.brand} ${device.model || device.type}</h4>
                     <p class="text-sm text-gray-600 mb-2">Type: ${device.type}</p>
                     <p class="text-sm text-gray-600 mb-4">Connectivity: ${[...device.ports, ...device.wirelessStandards].join(', ') || 'N/A'}</p>
                     <div class="flex flex-wrap gap-2 mt-auto">
-                        <button data-device-id="${device.id}" class="view-details-btn bg-blue-500 text-white text-xs px-3 py-1 rounded-md hover:bg-blue-600 transition-colors">View Details</button>
-                        <button data-device-id="${device.id}" class="edit-device-btn bg-yellow-500 text-white text-xs px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors">Edit</button>
-                        <button data-device-id="${device.id}" class="remove-inventory-device-btn bg-red-500 text-white text-xs px-3 py-1 rounded-md hover:bg-red-600 transition-colors">Remove</button>
-                        <button data-device-id="${device.id}" class="quick-check-btn bg-green-500 text-white text-xs px-3 py-1 rounded-md hover:bg-green-600 transition-colors">Quick Check</button>
+                        <button data-device-id="${device.id}" class="view-details-btn bg-blue-500 text-white text-xs px-3 py-1 rounded-md hover:bg-blue-600 transition-colors shadow-sm">View Details</button>
+                        <button data-device-id="${device.id}" class="edit-device-btn bg-yellow-500 text-white text-xs px-3 py-1 rounded-md hover:bg-yellow-600 transition-colors shadow-sm">Edit</button>
+                        <button data-device-id="${device.id}" class="remove-inventory-device-btn bg-red-500 text-white text-xs px-3 py-1 rounded-md hover:bg-red-600 transition-colors shadow-sm">Remove</button>
+                        <button data-device-id="${device.id}" class="quick-check-btn bg-green-500 text-white text-xs px-3 py-1 rounded-md hover:bg-green-600 transition-colors shadow-sm">Quick Check</button>
                     </div>
                     <div id="details-${device.id}" class="hidden mt-4 pt-4 border-t border-gray-200 text-sm text-gray-700">
                         <p><strong>Release Year:</strong> ${device.releaseYear}</p>
@@ -1206,13 +1192,13 @@
                                       'text-green-600';
                     factorsList.innerHTML += `
                         <div class="flex items-start">
-                            <span class="text-xl mr-2 ${riskLevel}">${factor.includes('High Risk') ? '❗' : (factor.includes('Moderate Risk') ? '⚠️' : '✅')}</span>
-                            <p class="text-gray-700">${factor}</p>
+                            <span class="text-xl mr-2 ${riskLevel}">${factor.includes('High Risk') ? '🛑' : (factor.includes('Moderate Risk') ? '🟡' : '🟢')}</span>
+                            <p class="text-gray-700 leading-relaxed">${factor}</p>
                         </div>
                     `;
                 });
             } else {
-                factorsList.innerHTML = '<p class="text-gray-600">No significant obsolescence factors identified for this device. Excellent!</p>';
+                factorsList.innerHTML = '<p class="text-gray-600 text-base">No significant obsolescence factors identified for this device. Excellent!</p>';
             }
 
 
@@ -1223,7 +1209,7 @@
                     recommendedUpgradesList.innerHTML += `<li>${upgrade}</li>`;
                 });
             } else {
-                recommendedUpgradesList.innerHTML = '<p class="text-gray-600">No specific upgrades recommended for longevity at this time.</p>';
+                recommendedUpgradesList.innerHTML = '<p class="text-gray-600 text-base">No specific upgrades recommended for longevity at this time.</p>';
             }
 
             // Chart.js rendering
@@ -1255,7 +1241,8 @@
                             title: {
                                 display: true,
                                 text: 'Score (0-100)',
-                                color: '#374151'
+                                color: '#374151',
+                                font: { size: 14, weight: 'bold' }
                             },
                             ticks: {
                                 color: '#4B5563'
@@ -1410,19 +1397,16 @@
 
             roadmap.forEach(step => {
                 const stepCard = document.createElement('div');
-                stepCard.className = 'bg-gray-100 p-4 rounded-lg shadow-sm';
+                stepCard.className = 'bg-gray-100 p-6 rounded-xl shadow-md';
                 stepCard.innerHTML = `
-                    <h4 class="text-lg font-semibold text-gray-900 mb-2">Step ${step.step}: ${step.action}</h4>
-                    <p class="text-gray-700 mb-2"><strong>Recommendations:</strong> ${step.recommendations}</p>
-                    <p class="text-gray-700 mb-2"><strong>Why this step?</strong> ${step.why}</p>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-3">Step ${step.step}: ${step.action}</h4>
+                    <p class="text-gray-700 mb-2 leading-relaxed"><strong>Recommendations:</strong> ${step.recommendations}</p>
+                    <p class="text-gray-700 mb-2 leading-relaxed"><strong>Why this step?</strong> ${step.why}</p>
                     ${step.products && step.products.length > 0 ? `<p class="text-gray-700"><strong>Mock Recommended Products:</strong> ${step.products.join(', ')}</p>` : ''}
                 `;
                 roadmapStepsContainer.appendChild(stepCard);
             });
         }
-
-        // --- No subscription function needed anymore ---
-        // function mockSubscribeToPremium() { ... }
 
         // --- Event Listeners ---
         document.addEventListener('DOMContentLoaded', () => {
