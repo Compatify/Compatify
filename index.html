@@ -814,17 +814,13 @@
                                     <h3 class="text-2xl font-semibold text-gray-900 mb-5">Existing Device</h3>
                                     <form id="existingDeviceForm" class="space-y-5">
                                         <div>
-                                            <label for="existingDeviceTypeSearch" class="block text-sm font-medium text-gray-900 mb-1">Search Device Type</label>
-                                            <input type="text" id="existingDeviceTypeSearch" placeholder="Type to filter..." class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                                            <label for="existingDeviceType" class="block text-sm font-medium text-gray-900 mb-1 mt-2">Device Type</label>
+                                            <label for="existingDeviceType" class="block text-sm font-medium text-gray-900 mb-1">Device Type</label>
                                             <select id="existingDeviceType" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                                 <option value="">Select Type</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label for="existingDeviceBrandSearch" class="block text-sm font-medium text-gray-900 mb-1">Search Brand</label>
-                                            <input type="text" id="existingDeviceBrandSearch" placeholder="Type to filter..." class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                                            <label for="existingDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1 mt-2">Brand</label>
+                                            <label for="existingDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1">Brand</label>
                                             <select id="existingDeviceBrand" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                                 <option value="">Select Brand</option>
                                             </select>
@@ -848,17 +844,13 @@
                                     <h3 class="text-2xl font-semibold text-gray-900 mb-5">New Device (Considering)</h3>
                                     <form id="newDeviceForm" class="space-y-5">
                                         <div>
-                                            <label for="newDeviceTypeSearch" class="block text-sm font-medium text-gray-900 mb-1">Search Device Type</label>
-                                            <input type="text" id="newDeviceTypeSearch" placeholder="Type to filter..." class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                                            <label for="newDeviceType" class="block text-sm font-medium text-gray-900 mb-1 mt-2">Device Type</label>
+                                            <label for="newDeviceType" class="block text-sm font-medium text-gray-900 mb-1">Device Type</label>
                                             <select id="newDeviceType" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                                 <option value="">Select Type</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label for="newDeviceBrandSearch" class="block text-sm font-medium text-gray-900 mb-1">Search Brand</label>
-                                            <input type="text" id="newDeviceBrandSearch" placeholder="Type to filter..." class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                                            <label for="newDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1 mt-2">Brand</label>
+                                            <label for="newDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1">Brand</label>
                                             <select id="newDeviceBrand" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                                 <option value="">Select Brand</option>
                                             </select>
@@ -898,13 +890,6 @@
                     `;
                     populateDeviceDropdowns();
                     updateSelectedDevicesDisplay(); // Initialize the visual display
-
-                    // Make dropdowns searchable
-                    makeSelectSearchable('existingDeviceType', 'existingDeviceTypeSearch');
-                    makeSelectSearchable('existingDeviceBrand', 'existingDeviceBrandSearch');
-                    makeSelectSearchable('newDeviceType', 'newDeviceTypeSearch');
-                    makeSelectSearchable('newDeviceBrand', 'newDeviceBrandSearch');
-
 
                     document.getElementById('addExistingDeviceBtn').addEventListener('click', () => addDeviceToChecker('existing'));
                     document.getElementById('addNewDeviceBtn').addEventListener('click', () => addDeviceToChecker('new'));
@@ -949,17 +934,13 @@
                                 <form id="inventoryDeviceForm" class="space-y-5">
                                     <input type="hidden" id="inventoryDeviceId">
                                     <div>
-                                        <label for="inventoryDeviceTypeSearch" class="block text-sm font-medium text-gray-900 mb-1">Search Device Type</label>
-                                        <input type="text" id="inventoryDeviceTypeSearch" placeholder="Type to filter..." class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                                        <label for="inventoryDeviceType" class="block text-sm font-medium text-gray-900 mb-1 mt-2">Device Type</label>
+                                        <label for="inventoryDeviceType" class="block text-sm font-medium text-gray-900 mb-1">Device Type</label>
                                         <select id="inventoryDeviceType" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                             <option value="">Select Type</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label for="inventoryDeviceBrandSearch" class="block text-sm font-medium text-gray-900 mb-1">Search Brand</label>
-                                        <input type="text" id="inventoryDeviceBrandSearch" placeholder="Type to filter..." class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                                        <label for="inventoryDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1 mt-2">Brand</label>
+                                        <label for="inventoryDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1">Brand</label>
                                         <select id="inventoryDeviceBrand" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                             <option value="">Select Brand</option>
                                         </select>
@@ -982,10 +963,6 @@
                     `;
                     updateUserInventoryDisplay();
                     populateInventoryDeviceFormDropdowns();
-
-                    // Make inventory dropdowns searchable
-                    makeSelectSearchable('inventoryDeviceType', 'inventoryDeviceTypeSearch');
-                    makeSelectSearchable('inventoryDeviceBrand', 'inventoryDeviceBrandSearch');
 
                     document.getElementById('addNewDeviceToInventoryBtn').addEventListener('click', () => showInventoryDeviceForm('add'));
                     document.getElementById('saveInventoryDeviceBtn').addEventListener('click', saveDeviceToInventory);
@@ -1119,99 +1096,6 @@
         // --- Compatibility Checker Functions ---
 
         /**
-         * Function to make a select dropdown searchable by typing into an associated input.
-         * @param {string} selectId The ID of the <select> element.
-         * @param {string} searchInputId The ID of the <input type="text"> element used for searching.
-         */
-        function makeSelectSearchable(selectId, searchInputId) {
-            const selectElement = document.getElementById(selectId);
-            const searchInput = document.getElementById(searchInputId);
-
-            if (!selectElement || !searchInput) return;
-
-            // Store all original options when the page loads
-            let originalOptions = [];
-            // Use a MutationObserver to react to changes in the select's options
-            // This is important because populateDeviceDropdowns() or populateInventoryDeviceFormDropdowns()
-            // might clear and repopulate the select, so we need to re-capture original options.
-            const observer = new MutationObserver(() => {
-                originalOptions = Array.from(selectElement.options).map(opt => ({
-                    value: opt.value,
-                    text: opt.textContent
-                }));
-                // Ensure the current selection is maintained if it's still in the filtered list
-                const currentValue = selectElement.value;
-                filterOptions(currentValue); // Re-apply filter to show selected option if exists
-            });
-
-            // Observe changes to the child list of the select element
-            observer.observe(selectElement, { childList: true });
-
-            // Initial population of originalOptions
-            originalOptions = Array.from(selectElement.options).map(opt => ({
-                value: opt.value,
-                text: opt.textContent
-            }));
-
-            const filterOptions = (filterText) => {
-                const lowerCaseFilter = filterText.toLowerCase();
-                selectElement.innerHTML = ''; // Clear current options
-
-                // Re-add the default "Select Type/Brand" option if it's not filtered out
-                const defaultOption = originalOptions.find(opt => opt.value === "");
-                if (defaultOption && (defaultOption.text.toLowerCase().includes(lowerCaseFilter) || lowerCaseFilter === "")) {
-                    const opt = document.createElement('option');
-                    opt.value = defaultOption.value;
-                    opt.textContent = defaultOption.text;
-                    selectElement.appendChild(opt);
-                }
-
-                // Add filtered options
-                originalOptions.forEach(option => {
-                    if (option.value !== "" && option.text.toLowerCase().includes(lowerCaseFilter)) {
-                        const opt = document.createElement('option');
-                        opt.value = option.value;
-                        opt.textContent = option.text;
-                        selectElement.appendChild(opt);
-                    }
-                });
-
-                // Attempt to select the first matching option if the search input matches it
-                if (selectElement.options.length > 1 && selectElement.options[1].textContent.toLowerCase() === lowerCaseFilter) {
-                    selectElement.value = selectElement.options[1].value;
-                } else if (selectElement.options.length === 1 && selectElement.options[0].value !== "" && selectElement.options[0].textContent.toLowerCase() === lowerCaseFilter) {
-                    selectElement.value = selectElement.options[0].value;
-                } else {
-                    // If the currently selected value is no longer in the filtered list, reset it
-                    if (!Array.from(selectElement.options).some(opt => opt.value === selectElement.value)) {
-                        selectElement.value = "";
-                    }
-                }
-            };
-
-            searchInput.addEventListener('input', () => {
-                filterOptions(searchInput.value);
-            });
-
-            // When the select element gains focus, clear the search input and show all options
-            selectElement.addEventListener('focus', () => {
-                searchInput.value = '';
-                filterOptions(''); // Show all options
-            });
-
-            // When the select element changes, update the search input to reflect the selected value
-            selectElement.addEventListener('change', () => {
-                const selectedOption = selectElement.options[selectElement.selectedIndex];
-                if (selectedOption && selectedOption.value !== "") {
-                    searchInput.value = selectedOption.textContent;
-                } else {
-                    searchInput.value = '';
-                }
-            });
-        }
-
-
-        /**
          * Populates the device type, brand, and connectivity dropdowns/checkboxes
          * for both existing and new device forms in the Compatibility Checker.
          */
@@ -1327,7 +1211,7 @@
             // Or if it's a custom device, prevent adding the same custom device again.
             const isDuplicate = userState.selectedDevicesForCheck.some(d =>
                 (!d.isCustom && d.id === selectedDevice.id) ||
-                (d.isCustom && d.type === selectedDevice.type && d.brand === selectedDevice.brand && d.model === selectedDevice.model && JSON.stringify(d.ports) === JSON.stringify(selectedDevice.ports) && JSON.stringify(d.wirelessStandards) === JSON.stringify(selectedDevice.wirelessStandards))
+                (d.isCustom && d.type === selectedDevice.type && d.brand === selectedDevice.brand && d.model === selectedDevice.model && JSON.stringify(d.ports) === JSON.stringify(selectedDevice.ports) && JSON.stringify(d.wirelessStandards) === JSON.stringify(selectedConnectivity))
             );
 
             if (isDuplicate) {
@@ -1344,9 +1228,7 @@
             document.getElementById(`${formPrefix}Brand`).value = '';
             document.getElementById(`${formPrefix}Model`).value = '';
             document.querySelectorAll(`#${formPrefix}ConnectivityCheckboxes input[type="checkbox"]`).forEach(cb => cb.checked = false);
-            document.getElementById(`${formPrefix}TypeSearch`).value = ''; // Clear search input
-            document.getElementById(`${formPrefix}BrandSearch`).value = ''; // Clear search input
-            populateDeviceDropdowns(); // Re-populate dropdowns to show all options after clearing search
+            populateDeviceDropdowns(); // Re-populate dropdowns to ensure all options are visible after clearing search
         }
 
         /**
@@ -1355,6 +1237,7 @@
         function updateSelectedDevicesDisplay() {
             const device1Card = document.getElementById('selectedDevice1Card');
             const device2Card = document.getElementById('selectedDevice2Card');
+            const runCompatibilityCheckBtn = document.getElementById('runCompatibilityCheckBtn');
 
             // Reset cards
             device1Card.innerHTML = '<p class="text-gray-500 text-center italic">Select your first device</p>';
@@ -1401,6 +1284,9 @@
                     removeDeviceFromChecker(event.target.dataset.deviceTempId);
                 });
             });
+
+            // Enable/disable run compatibility button based on selected devices
+            runCompatibilityCheckBtn.disabled = userState.selectedDevicesForCheck.length !== 2;
         }
 
         /**
@@ -1704,9 +1590,6 @@
             const brandSelect = document.getElementById('inventoryDeviceBrand');
             const modelInput = document.getElementById('inventoryDeviceModel');
             const connectivityContainer = document.getElementById('inventoryConnectivityCheckboxes');
-            const typeSearchInput = document.getElementById('inventoryDeviceTypeSearch');
-            const brandSearchInput = document.getElementById('inventoryDeviceBrandSearch');
-
 
             formContainer.classList.remove('hidden');
             formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1717,8 +1600,6 @@
             modelInput.value = '';
             Array.from(connectivityContainer.querySelectorAll('input[type="checkbox"]')).forEach(cb => cb.checked = false);
             deviceIdInput.value = '';
-            typeSearchInput.value = ''; // Clear search input
-            brandSearchInput.value = ''; // Clear search input
 
 
             if (mode === 'add') {
@@ -1734,9 +1615,6 @@
                     typeSelect.value = deviceToEdit.type;
                     brandSelect.value = deviceToEdit.brand;
                     modelInput.value = deviceToEdit.model;
-                    typeSearchInput.value = deviceToEdit.type; // Set search input for pre-fill
-                    brandSearchInput.value = deviceToEdit.brand; // Set search input for pre-fill
-
 
                     const allPorts = [...new Set(deviceData.flatMap(d => d.ports))];
                     const allWirelessStandards = [...new Set(deviceData.flatMap(d => d.wirelessStandards))];
