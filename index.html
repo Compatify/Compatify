@@ -79,11 +79,23 @@
         </div>
     </div>
 
+    <!-- Replace Device Modal -->
+    <div id="replaceDeviceModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full text-center transform transition-all duration-300 ease-out scale-95 opacity-0" id="replaceModalContent">
+            <p class="text-gray-900 text-lg font-semibold mb-4">Two devices are already selected. Which one would you like to replace?</p>
+            <div class="flex flex-col gap-3">
+                <button id="replaceDevice1Btn" class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors shadow-md">Replace Device 1</button>
+                <button id="replaceDevice2Btn" class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors shadow-md">Replace Device 2</button>
+                <button id="cancelReplaceBtn" class="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-400 transition-colors shadow-md">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Sidebar Navigation (Desktop) / Bottom Navigation (Mobile) -->
     <nav class="sidebar-nav bg-gray-100 md:w-64 p-4 flex flex-col md:flex-col items-center shadow-lg md:shadow-none md:border-r border-gray-200">
         <div class="mb-8 md:mb-12 text-center md:text-left w-full">
             <h1 class="text-3xl font-bold text-gray-900 mb-1">Compatify</h1>
-            <p class="text-sm text-gray-500">Future-Proof Your Devices</p>
+            <p class="text-sm text-gray-500">Future-Proof Your Devices with the Power of AI</p>
         </div>
         <ul class="flex md:flex-col gap-2 md:gap-3 w-full">
             <li>
@@ -127,11 +139,12 @@
     <script>
         // --- Mock Data ---
         const deviceData = [
+            // Laptops
             {
                 id: 'macbook-pro-m1-2020',
                 type: 'Laptop',
                 brand: 'Apple',
-                model: 'MacBook Pro M1',
+                model: 'MacBook Pro M1 (2020)',
                 releaseYear: 2020,
                 ports: ['USB-C (Thunderbolt 3) x2', '3.5mm Audio Jack'],
                 wirelessStandards: ['Wi-Fi 6', 'Bluetooth 5.0'],
@@ -142,18 +155,148 @@
                 recommendedUpgrades: ['USB-C hub with multiple ports (USB-A, HDMI, Ethernet)', 'External SSD for expanded storage']
             },
             {
+                id: 'dell-xps-15-9530',
+                type: 'Laptop',
+                brand: 'Dell',
+                model: 'XPS 15 (9530)',
+                releaseYear: 2023,
+                ports: ['Thunderbolt 4 x2', 'USB-C 3.2 Gen 2', 'SD Card Reader', '3.5mm Audio Jack'],
+                wirelessStandards: ['Wi-Fi 6E', 'Bluetooth 5.2'],
+                osCompatibility: ['Windows 11'],
+                notes: "Powerful Windows laptop with great display and modern connectivity.",
+                futureProofingScore: 92,
+                obsolescenceFactors: ['No USB-A ports natively'],
+                recommendedUpgrades: ['USB-C to USB-A adapter for legacy peripherals']
+            },
+            {
+                id: 'hp-spectre-x360-14',
+                type: 'Laptop',
+                brand: 'HP',
+                model: 'Spectre x360 14 (2023)',
+                releaseYear: 2023,
+                ports: ['Thunderbolt 4 x2', 'USB-A 3.1 Gen 1', '3.5mm Audio Jack'],
+                wirelessStandards: ['Wi-Fi 6E', 'Bluetooth 5.3'],
+                osCompatibility: ['Windows 11'],
+                notes: "Premium convertible laptop with excellent display and modern connectivity.",
+                futureProofingScore: 95,
+                obsolescenceFactors: [],
+                recommendedUpgrades: []
+            },
+            {
+                id: 'lenovo-thinkpad-x1-carbon-gen-10',
+                type: 'Laptop',
+                brand: 'Lenovo',
+                model: 'ThinkPad X1 Carbon Gen 10',
+                releaseYear: 2022,
+                ports: ['Thunderbolt 4 x2', 'USB-A 3.2 Gen 1 x2', 'HDMI 2.0', '3.5mm Audio Jack', 'Ethernet (via adapter)'],
+                wirelessStandards: ['Wi-Fi 6E', 'Bluetooth 5.2'],
+                osCompatibility: ['Windows 11', 'Linux'],
+                notes: "Business-class laptop with robust build and comprehensive ports.",
+                futureProofingScore: 88,
+                obsolescenceFactors: ['HDMI 2.0 not 2.1'],
+                recommendedUpgrades: []
+            },
+            {
+                id: 'microsoft-surface-laptop-4',
+                type: 'Laptop',
+                brand: 'Microsoft',
+                model: 'Surface Laptop 4',
+                releaseYear: 2021,
+                ports: ['USB-C', 'USB-A 3.1', 'Surface Connect', '3.5mm Audio Jack'],
+                wirelessStandards: ['Wi-Fi 6', 'Bluetooth 5.0'],
+                osCompatibility: ['Windows 10+', 'Windows 11'],
+                notes: "Sleek design, good for everyday tasks. Limited port selection.",
+                futureProofingScore: 75,
+                obsolescenceFactors: ['Older Wi-Fi standard (Wi-Fi 6E/7 available)', 'Limited port diversity', 'Surface Connect is proprietary'],
+                recommendedUpgrades: ['USB-C hub for more ports', 'Upgrade to newer Surface Laptop model']
+            },
+
+            // Monitors
+            {
                 id: 'dell-ultrasharp-u2723qe',
                 type: 'Monitor',
                 brand: 'Dell',
                 model: 'UltraSharp U2723QE',
                 releaseYear: 2022,
-                ports: ['USB-C (DP Alt Mode, 90W PD)', 'HDMI 2.0', 'DisplayPort 1.4', 'USB-A 3.2 x4', 'Ethernet'],
+                ports: ['USB-C (DP Alt Mode, 90W PD)', 'HDMI 2.0', 'DisplayPort 1.4', 'USB-A 3.2 Gen 2 x4', 'Ethernet'],
                 wirelessStandards: [],
                 osCompatibility: ['macOS', 'Windows', 'Linux'],
                 notes: "Versatile monitor with good connectivity, ideal for USB-C laptops.",
                 futureProofingScore: 90,
                 obsolescenceFactors: ['HDMI 2.0 not 2.1 (for latest gaming consoles)'],
                 recommendedUpgrades: ['None specific to monitor, ensure GPU supports DP 1.4 or HDMI 2.0+']
+            },
+            {
+                id: 'lg-ultrafine-5k',
+                type: 'Monitor',
+                brand: 'LG',
+                model: 'UltraFine 5K (27MD5KL)',
+                releaseYear: 2019,
+                ports: ['Thunderbolt 3', 'USB-C 3.0 x3'],
+                wirelessStandards: [],
+                osCompatibility: ['macOS', 'Windows (with Thunderbolt 3)'],
+                notes: "Designed for Macs, excellent resolution and color accuracy.",
+                futureProofingScore: 78,
+                obsolescenceFactors: ['Thunderbolt 3 not 4', 'Only USB-C/Thunderbolt inputs', 'No HDMI/DisplayPort'],
+                recommendedUpgrades: ['Thunderbolt 3 to Thunderbolt 4 cable (if connecting to TB4 device)']
+            },
+            {
+                id: 'samsung-odyssey-g7',
+                type: 'Monitor',
+                brand: 'Samsung',
+                model: 'Odyssey G7 (27-inch)',
+                releaseYear: 2020,
+                ports: ['HDMI 2.0', 'DisplayPort 1.4', 'USB-A 3.0 x2'],
+                wirelessStandards: [],
+                osCompatibility: ['Universal'],
+                notes: "High refresh rate gaming monitor with QHD resolution.",
+                futureProofingScore: 82,
+                obsolescenceFactors: ['HDMI 2.0 not 2.1 (limits 4K 120Hz for consoles)'],
+                recommendedUpgrades: ['None, if primary use is PC gaming via DisplayPort']
+            },
+
+            // Phones
+            {
+                id: 'samsung-galaxy-s24-ultra',
+                type: 'Phone',
+                brand: 'Samsung',
+                model: 'Galaxy S24 Ultra',
+                releaseYear: 2024,
+                ports: ['USB-C 3.2 Gen 1'],
+                wirelessStandards: ['Wi-Fi 7', 'Bluetooth 5.3', '5G', 'UWB'],
+                osCompatibility: ['Android 14+'],
+                notes: "Latest flagship Android with advanced AI features and camera.",
+                futureProofingScore: 98,
+                obsolescenceFactors: ['No headphone jack', 'No expandable storage'],
+                recommendedUpgrades: ['Wireless earbuds', 'Cloud storage subscription']
+            },
+            {
+                id: 'iphone-15-pro-max',
+                type: 'Phone',
+                brand: 'Apple',
+                model: 'iPhone 15 Pro Max',
+                releaseYear: 2023,
+                ports: ['USB-C (USB 3)'],
+                wirelessStandards: ['Wi-Fi 6E', 'Bluetooth 5.3', '5G', 'UWB'],
+                osCompatibility: ['iOS 17+'],
+                notes: "Latest iPhone with USB-C, powerful chip, and ProMotion display.",
+                futureProofingScore: 95,
+                obsolescenceFactors: ['No headphone jack'],
+                recommendedUpgrades: ['Wireless earbuds']
+            },
+            {
+                id: 'google-pixel-8',
+                type: 'Phone',
+                brand: 'Google',
+                model: 'Pixel 8',
+                releaseYear: 2023,
+                ports: ['USB-C 3.2 Gen 2'],
+                wirelessStandards: ['Wi-Fi 7', 'Bluetooth 5.3', '5G'],
+                osCompatibility: ['Android 14+'],
+                notes: "AI-focused Android phone with excellent camera and long software support.",
+                futureProofingScore: 93,
+                obsolescenceFactors: ['No headphone jack'],
+                recommendedUpgrades: ['Wireless earbuds']
             },
             {
                 id: 'samsung-galaxy-s21',
@@ -169,48 +312,183 @@
                 obsolescenceFactors: ['Older Wi-Fi standard (Wi-Fi 6E/7 available)', 'No headphone jack', 'OS updates ending soon (typical for older Android flagships)'],
                 recommendedUpgrades: ['Wireless earbuds', 'USB-C to 3.5mm adapter']
             },
+
+            // Smart TVs
             {
-                id: 'hp-spectre-x360-14',
-                type: 'Laptop',
-                brand: 'HP',
-                model: 'Spectre x360 14',
-                releaseYear: 2023,
-                ports: ['Thunderbolt 4 x2', 'USB-A 3.1', '3.5mm Audio Jack'],
-                wirelessStandards: ['Wi-Fi 6E', 'Bluetooth 5.3'],
-                osCompatibility: ['Windows 11'],
-                notes: "Premium convertible laptop with excellent display and modern connectivity.",
-                futureProofingScore: 95,
+                id: 'lg-oled-c4',
+                type: 'Smart TV',
+                brand: 'LG',
+                model: 'OLED C4',
+                releaseYear: 2024,
+                ports: ['HDMI 2.1 x4', 'USB-A 2.0 x3', 'Ethernet', 'Optical Audio Out'],
+                wirelessStandards: ['Wi-Fi 6E', 'Bluetooth 5.0'],
+                osCompatibility: ['webOS'],
+                notes: "Latest LG OLED, perfect for next-gen gaming and high-quality content.",
+                futureProofingScore: 97,
                 obsolescenceFactors: [],
                 recommendedUpgrades: []
             },
             {
-                id: 'lg-oled-c2',
+                id: 'samsung-qn90c',
                 type: 'Smart TV',
-                brand: 'LG',
-                model: 'OLED C2',
-                releaseYear: 2022,
+                brand: 'Samsung',
+                model: 'QN90C Neo QLED',
+                releaseYear: 2023,
                 ports: ['HDMI 2.1 x4', 'USB-A 2.0 x3', 'Ethernet', 'Optical Audio Out'],
-                wirelessStandards: ['Wi-Fi 5', 'Bluetooth 5.0'],
-                osCompatibility: ['webOS'],
-                notes: "Excellent picture quality, great for gaming with HDMI 2.1.",
-                futureProofingScore: 80,
-                obsolescenceFactors: ['Older Wi-Fi standard (Wi-Fi 5)', 'USB-A 2.0 is slow'],
-                recommendedUpgrades: ['External streaming device if faster Wi-Fi is needed for streaming']
+                wirelessStandards: ['Wi-Fi 5', 'Bluetooth 5.2'],
+                osCompatibility: ['Tizen OS'],
+                notes: "Bright Neo QLED TV with excellent HDR and gaming features.",
+                futureProofingScore: 90,
+                obsolescenceFactors: ['Wi-Fi 5 not the latest'],
+                recommendedUpgrades: ['External streaming device for faster Wi-Fi if needed']
             },
             {
-                id: 'generic-usb-a-hub',
-                type: 'Hub/Dock',
-                brand: 'Generic',
-                model: '4-Port USB-A Hub',
-                releaseYear: 2015,
-                ports: ['USB-A 2.0 (input)', 'USB-A 2.0 x4 (output)'],
-                wirelessStandards: [],
-                osCompatibility: ['Universal'],
-                notes: "Basic USB-A hub for older peripherals.",
-                futureProofingScore: 30,
-                obsolescenceFactors: ['Very slow USB 2.0 speeds', 'No modern ports like USB-C'],
-                recommendedUpgrades: ['USB-C hub with USB 3.0/3.1/3.2 ports']
+                id: 'sony-bravia-x90j',
+                type: 'Smart TV',
+                brand: 'Sony',
+                model: 'Bravia X90J',
+                releaseYear: 2021,
+                ports: ['HDMI 2.1 x2', 'HDMI 2.0 x2', 'USB-A 2.0 x2', 'Ethernet', 'Optical Audio Out'],
+                wirelessStandards: ['Wi-Fi 5', 'Bluetooth 4.2'],
+                osCompatibility: ['Google TV'],
+                notes: "Good all-around TV, but older wireless and limited HDMI 2.1 ports.",
+                futureProofingScore: 70,
+                obsolescenceFactors: ['Limited HDMI 2.1 ports', 'Older Wi-Fi and Bluetooth standards', 'USB-A 2.0 is slow'],
+                recommendedUpgrades: ['HDMI 2.1 switch if more ports needed', 'External streaming device for faster wireless']
             },
+
+            // Gaming Consoles
+            {
+                id: 'sony-playstation-5',
+                type: 'Gaming Console',
+                brand: 'Sony',
+                model: 'PlayStation 5',
+                releaseYear: 2020,
+                ports: ['HDMI 2.1', 'USB-A 3.1 x2', 'USB-A 2.0', 'USB-C'],
+                wirelessStandards: ['Wi-Fi 6', 'Bluetooth 5.1', 'Ethernet'],
+                osCompatibility: ['Proprietary'],
+                notes: "Next-gen console with fast loading and ray tracing.",
+                futureProofingScore: 90,
+                obsolescenceFactors: ['Requires HDMI 2.1 for full features (VRR, 120Hz 4K)'],
+                recommendedUpgrades: ['4K 120Hz TV/Monitor with HDMI 2.1']
+            },
+            {
+                id: 'xbox-series-x',
+                type: 'Gaming Console',
+                brand: 'Microsoft',
+                model: 'Xbox Series X',
+                releaseYear: 2020,
+                ports: ['HDMI 2.1', 'USB-A 3.1 x3', 'Ethernet'],
+                wirelessStandards: ['Wi-Fi 5', 'Bluetooth 5.0'],
+                osCompatibility: ['Proprietary'],
+                notes: "Powerful console with Game Pass integration.",
+                futureProofingScore: 88,
+                obsolescenceFactors: ['Requires HDMI 2.1 for full features', 'Older Wi-Fi standard'],
+                recommendedUpgrades: ['4K 120Hz TV/Monitor with HDMI 2.1']
+            },
+            {
+                id: 'nintendo-switch-oled',
+                type: 'Gaming Console',
+                brand: 'Nintendo',
+                model: 'Switch OLED',
+                releaseYear: 2021,
+                ports: ['USB-C (console)', 'HDMI 1.4 (dock)', 'USB-A 2.0 x2 (dock)', 'Ethernet (dock)'],
+                wirelessStandards: ['Wi-Fi 5', 'Bluetooth 4.1'],
+                osCompatibility: ['Proprietary'],
+                notes: "Hybrid console, great for portable and TV gaming.",
+                futureProofingScore: 65,
+                obsolescenceFactors: ['Older HDMI standard (dock)', 'Older Wi-Fi/Bluetooth standards', 'Lower resolution output (1080p TV)'],
+                recommendedUpgrades: ['None, as its strengths are portability and exclusive games, not cutting-edge graphics/connectivity.']
+            },
+
+            // Audio Devices
+            {
+                id: 'sony-wh-1000xm5',
+                type: 'Headphones',
+                brand: 'Sony',
+                model: 'WH-1000XM5',
+                releaseYear: 2022,
+                ports: ['USB-C (charging)', '3.5mm Audio Jack'],
+                wirelessStandards: ['Bluetooth 5.2'],
+                osCompatibility: ['Universal'],
+                notes: "Excellent noise-cancelling headphones.",
+                futureProofingScore: 90,
+                obsolescenceFactors: ['No aptX Adaptive/Lossless support'],
+                recommendedUpgrades: ['None, unless high-res wireless audio is critical.']
+            },
+            {
+                id: 'bose-quietcomfort-earbuds-ii',
+                type: 'Earbuds',
+                brand: 'Bose',
+                model: 'QuietComfort Earbuds II',
+                releaseYear: 2022,
+                ports: ['USB-C (charging case)'],
+                wirelessStandards: ['Bluetooth 5.3'],
+                osCompatibility: ['Universal'],
+                notes: "Top-tier noise cancellation in a compact earbud form factor.",
+                futureProofingScore: 88,
+                obsolescenceFactors: ['No aptX Adaptive/Lossless support'],
+                recommendedUpgrades: ['None.']
+            },
+            {
+                id: 'apple-airpods-pro-2',
+                type: 'Earbuds',
+                brand: 'Apple',
+                model: 'AirPods Pro (2nd Gen)',
+                releaseYear: 2022,
+                ports: ['Lightning (charging case)'], // Note: USB-C case released later
+                wirelessStandards: ['Bluetooth 5.3'],
+                osCompatibility: ['iOS', 'macOS', 'watchOS'],
+                notes: "Seamless integration with Apple ecosystem, great ANC.",
+                futureProofingScore: 85,
+                obsolescenceFactors: ['Lightning port on charging case (older version)', 'Limited features outside Apple ecosystem'],
+                recommendedUpgrades: ['Upgrade to USB-C charging case if available/needed.']
+            },
+            // Smart Home Devices
+            {
+                id: 'google-nest-hub-2nd-gen',
+                type: 'Smart Display',
+                brand: 'Google',
+                model: 'Nest Hub (2nd Gen)',
+                releaseYear: 2021,
+                ports: ['Power Port'],
+                wirelessStandards: ['Wi-Fi 5', 'Bluetooth 5.0', 'Thread'],
+                osCompatibility: ['Google Home Ecosystem'],
+                notes: "Smart display with sleep tracking and Google Assistant.",
+                futureProofingScore: 80,
+                obsolescenceFactors: ['Wi-Fi 5 not the latest', 'No Matter support out of the box (might get update)'],
+                recommendedUpgrades: ['None, if happy with current features.']
+            },
+            {
+                id: 'philips-hue-bridge',
+                type: 'Smart Home Hub',
+                brand: 'Philips Hue',
+                model: 'Bridge 2.1',
+                releaseYear: 2015,
+                ports: ['Ethernet', 'Power Port'],
+                wirelessStandards: ['Zigbee'],
+                osCompatibility: ['Philips Hue Ecosystem'],
+                notes: "Required for Philips Hue smart lights.",
+                futureProofingScore: 70,
+                obsolescenceFactors: ['Older standard (Zigbee, not Thread/Matter)', 'Wired connection only'],
+                recommendedUpgrades: ['None, as it\'s a dedicated hub for Hue lights.']
+            },
+            {
+                id: 'ring-video-doorbell-pro-2',
+                type: 'Smart Doorbell',
+                brand: 'Ring',
+                model: 'Video Doorbell Pro 2',
+                releaseYear: 2021,
+                ports: ['Wired Power'],
+                wirelessStandards: ['Wi-Fi 5'],
+                osCompatibility: ['Ring/Amazon Alexa Ecosystem'],
+                notes: "High-resolution video doorbell with 3D Motion Detection.",
+                futureProofingScore: 85,
+                obsolescenceFactors: ['Wi-Fi 5 not the latest'],
+                recommendedUpgrades: []
+            },
+
+            // Storage
             {
                 id: 'samsung-t7-ssd',
                 type: 'External Drive',
@@ -226,41 +504,86 @@
                 recommendedUpgrades: []
             },
             {
-                id: 'microsoft-surface-pro-7',
-                type: 'Tablet',
-                brand: 'Microsoft',
-                model: 'Surface Pro 7',
-                releaseYear: 2019,
-                ports: ['USB-C', 'USB-A 3.0', 'Surface Connect', '3.5mm Audio Jack'],
-                wirelessStandards: ['Wi-Fi 6', 'Bluetooth 5.0'],
-                osCompatibility: ['Windows 10+'],
-                notes: "Versatile 2-in-1 device, good for productivity.",
-                futureProofingScore: 65,
-                obsolescenceFactors: ['Older processor generation', 'Limited port selection for a laptop replacement', 'Wi-Fi 6 not the latest'],
-                recommendedUpgrades: ['Surface Dock for more ports', 'Upgrade to newer Surface Pro model']
+                id: 'wd-elements-desktop-hdd',
+                type: 'External Drive',
+                brand: 'Western Digital',
+                model: 'Elements Desktop HDD',
+                releaseYear: 2018,
+                ports: ['USB-A 3.0'],
+                wirelessStandards: [],
+                osCompatibility: ['Universal'],
+                notes: "High capacity, but slower HDD speeds.",
+                futureProofingScore: 50,
+                obsolescenceFactors: ['Mechanical drive (slower than SSDs)', 'USB-A only', 'Requires external power'],
+                recommendedUpgrades: ['Upgrade to external SSD for speed and portability.']
+            },
+
+            // Adapters/Hubs (for recommendations)
+            {
+                id: 'anker-usb-c-hub',
+                type: 'Hub/Adapter',
+                brand: 'Anker',
+                model: '5-in-1 USB-C Hub',
+                releaseYear: 2021,
+                ports: ['USB-C (input)', 'HDMI 2.0', 'USB-A 3.0 x2', 'USB-C PD'],
+                wirelessStandards: [],
+                osCompatibility: ['Universal'],
+                notes: "Common multi-port adapter for USB-C laptops.",
+                futureProofingScore: 80,
+                obsolescenceFactors: [],
+                recommendedUpgrades: []
             },
             {
-                id: 'sony-playstation-5',
-                type: 'Gaming Console',
-                brand: 'Sony',
-                model: 'PlayStation 5',
-                releaseYear: 2020,
-                ports: ['HDMI 2.1', 'USB-A 3.1 x2', 'USB-A 2.0', 'USB-C'],
-                wirelessStandards: ['Wi-Fi 6', 'Bluetooth 5.1', 'Ethernet'],
-                osCompatibility: ['Proprietary'],
-                notes: "Next-gen console with fast loading and ray tracing.",
-                futureProofingScore: 90,
-                obsolescenceFactors: ['Requires HDMI 2.1 for full features (VRR, 120Hz 4K)'],
-                recommendedUpgrades: ['4K 120Hz TV with HDMI 2.1']
+                id: 'belkin-thunderbolt-4-dock',
+                type: 'Hub/Adapter',
+                brand: 'Belkin',
+                model: 'Thunderbolt 4 Dock Pro',
+                releaseYear: 2022,
+                ports: ['Thunderbolt 4 (input)', 'Thunderbolt 4 x2', 'DisplayPort 1.4', 'HDMI 2.0', 'USB-A 3.1 Gen 2 x3', 'USB-A 2.0', 'Ethernet', 'SD Card Reader', '3.5mm Audio'],
+                wirelessStandards: [],
+                osCompatibility: ['Universal (Thunderbolt 4/3 compatible)'],
+                notes: "Premium dock for high-end workstations.",
+                futureProofingScore: 95,
+                obsolescenceFactors: [],
+                recommendedUpgrades: []
+            },
+            {
+                id: 'generic-usb-c-to-hdmi',
+                type: 'Adapter',
+                brand: 'Generic',
+                model: 'USB-C to HDMI Adapter',
+                releaseYear: 2018,
+                ports: ['USB-C (input)', 'HDMI 1.4 (output)'],
+                wirelessStandards: [],
+                osCompatibility: ['Universal'],
+                notes: "Basic adapter for connecting USB-C to HDMI displays.",
+                futureProofingScore: 60,
+                obsolescenceFactors: ['Older HDMI standard (limits 4K 60Hz or higher)'],
+                recommendedUpgrades: ['HDMI 2.0/2.1 compatible adapter for 4K 60Hz+']
+            },
+            {
+                id: 'generic-usb-a-to-c-cable',
+                type: 'Cable',
+                brand: 'Generic',
+                model: 'USB-A to USB-C Cable',
+                releaseYear: 2017,
+                ports: ['USB-A (input)', 'USB-C (output)'],
+                wirelessStandards: [],
+                osCompatibility: ['Universal'],
+                notes: "Standard cable for connecting USB-A to USB-C devices.",
+                futureProofingScore: 70,
+                obsolescenceFactors: ['Speed limited by USB-A 2.0/3.0 standard'],
+                recommendedUpgrades: ['USB-C to USB-C cable for faster speeds if both devices support it.']
             }
         ];
 
         // --- Global State ---
         const userState = {
-            selectedDevicesForCheck: [], // Stores device objects for checker
+            selectedDevicesForCheck: [], // Stores device objects for checker (max 2)
             userInventory: [], // Stores device objects for all users
             currentSection: 'home',
-            chartInstance: null // To store the Chart.js instance
+            chartInstance: null, // To store the Chart.js instance
+            deviceToAddNext: null // Temporarily holds device data when replace modal is open
         };
 
         // --- DOM Elements ---
@@ -270,6 +593,14 @@
         const modalMessage = document.getElementById('modalMessage');
         const modalCloseButton = document.getElementById('modalCloseButton');
         const modalContent = document.getElementById('modalContent'); // Get the modal content div
+
+        // New modal elements for replacement
+        const replaceDeviceModal = document.getElementById('replaceDeviceModal');
+        const replaceModalContent = document.getElementById('replaceModalContent');
+        const replaceDevice1Btn = document.getElementById('replaceDevice1Btn');
+        const replaceDevice2Btn = document.getElementById('replaceDevice2Btn');
+        const cancelReplaceBtn = document.getElementById('cancelReplaceBtn');
+
 
         // --- Utility Functions ---
 
@@ -296,6 +627,41 @@
             setTimeout(() => {
                 messageModal.classList.add('hidden');
             }, 300); // Match transition duration
+        }
+
+        /**
+         * Displays the replace device modal.
+         * @param {object} device The device object that the user is trying to add.
+         */
+        function showReplaceDeviceModal(device) {
+            userState.deviceToAddNext = device; // Store the device temporarily
+            replaceDeviceModal.classList.remove('hidden');
+            replaceModalContent.classList.remove('scale-95', 'opacity-0');
+            replaceModalContent.classList.add('scale-100', 'opacity-100');
+
+            // Update button texts with current device names if available
+            if (userState.selectedDevicesForCheck[0]) {
+                replaceDevice1Btn.textContent = `Replace Device 1: ${userState.selectedDevicesForCheck[0].brand} ${userState.selectedDevicesForCheck[0].model || userState.selectedDevicesForCheck[0].type}`;
+            } else {
+                replaceDevice1Btn.textContent = `Replace Device 1`;
+            }
+            if (userState.selectedDevicesForCheck[1]) {
+                replaceDevice2Btn.textContent = `Replace Device 2: ${userState.selectedDevicesForCheck[1].brand} ${userState.selectedDevicesForCheck[1].model || userState.selectedDevicesForCheck[1].type}`;
+            } else {
+                replaceDevice2Btn.textContent = `Replace Device 2`;
+            }
+        }
+
+        /**
+         * Hides the replace device modal.
+         */
+        function hideReplaceDeviceModal() {
+            replaceModalContent.classList.remove('scale-100', 'opacity-100');
+            replaceModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                replaceDeviceModal.classList.add('hidden');
+                userState.deviceToAddNext = null; // Clear temporary device
+            }, 300);
         }
 
         /**
@@ -448,13 +814,17 @@
                                     <h3 class="text-2xl font-semibold text-gray-900 mb-5">Existing Device</h3>
                                     <form id="existingDeviceForm" class="space-y-5">
                                         <div>
-                                            <label for="existingDeviceType" class="block text-sm font-medium text-gray-900 mb-1">Device Type</label>
+                                            <label for="existingDeviceTypeSearch" class="block text-sm font-medium text-gray-900 mb-1">Search Device Type</label>
+                                            <input type="text" id="existingDeviceTypeSearch" placeholder="Type to filter..." class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                            <label for="existingDeviceType" class="block text-sm font-medium text-gray-900 mb-1 mt-2">Device Type</label>
                                             <select id="existingDeviceType" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                                 <option value="">Select Type</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label for="existingDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1">Brand</label>
+                                            <label for="existingDeviceBrandSearch" class="block text-sm font-medium text-gray-900 mb-1">Search Brand</label>
+                                            <input type="text" id="existingDeviceBrandSearch" placeholder="Type to filter..." class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                            <label for="existingDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1 mt-2">Brand</label>
                                             <select id="existingDeviceBrand" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                                 <option value="">Select Brand</option>
                                             </select>
@@ -478,13 +848,17 @@
                                     <h3 class="text-2xl font-semibold text-gray-900 mb-5">New Device (Considering)</h3>
                                     <form id="newDeviceForm" class="space-y-5">
                                         <div>
-                                            <label for="newDeviceType" class="block text-sm font-medium text-gray-900 mb-1">Device Type</label>
+                                            <label for="newDeviceTypeSearch" class="block text-sm font-medium text-gray-900 mb-1">Search Device Type</label>
+                                            <input type="text" id="newDeviceTypeSearch" placeholder="Type to filter..." class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                            <label for="newDeviceType" class="block text-sm font-medium text-gray-900 mb-1 mt-2">Device Type</label>
                                             <select id="newDeviceType" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                                 <option value="">Select Type</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label for="newDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1">Brand</label>
+                                            <label for="newDeviceBrandSearch" class="block text-sm font-medium text-gray-900 mb-1">Search Brand</label>
+                                            <input type="text" id="newDeviceBrandSearch" placeholder="Type to filter..." class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                            <label for="newDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1 mt-2">Brand</label>
                                             <select id="newDeviceBrand" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                                 <option value="">Select Brand</option>
                                             </select>
@@ -506,9 +880,13 @@
 
                             <div class="mb-10 p-6 bg-white rounded-xl shadow-md">
                                 <h3 class="text-2xl font-semibold text-gray-900 mb-5">Devices for Comparison:</h3>
-                                <div id="selectedDevicesDisplay" class="flex flex-wrap gap-4 mb-6">
-                                    <!-- Selected devices will be displayed here -->
-                                    <p class="text-gray-500" id="noDevicesSelectedMessage">No devices selected yet.</p>
+                                <div id="selectedDevicesContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                    <div id="selectedDevice1Card" class="bg-blue-50 p-4 rounded-xl shadow-inner flex flex-col justify-between min-h-[120px] border border-blue-200">
+                                        <p class="text-gray-500 text-center italic">Select your first device</p>
+                                    </div>
+                                    <div id="selectedDevice2Card" class="bg-blue-50 p-4 rounded-xl shadow-inner flex flex-col justify-between min-h-[120px] border border-blue-200">
+                                        <p class="text-gray-500 text-center italic">Select your second device</p>
+                                    </div>
                                 </div>
                                 <button id="runCompatibilityCheckBtn" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors duration-300 ease-in-out w-full md:w-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">Run Compatibility Check</button>
                             </div>
@@ -519,7 +897,14 @@
                         </div>
                     `;
                     populateDeviceDropdowns();
-                    updateSelectedDevicesDisplay();
+                    updateSelectedDevicesDisplay(); // Initialize the visual display
+
+                    // Make dropdowns searchable
+                    makeSelectSearchable('existingDeviceType', 'existingDeviceTypeSearch');
+                    makeSelectSearchable('existingDeviceBrand', 'existingDeviceBrandSearch');
+                    makeSelectSearchable('newDeviceType', 'newDeviceTypeSearch');
+                    makeSelectSearchable('newDeviceBrand', 'newDeviceBrandSearch');
+
 
                     document.getElementById('addExistingDeviceBtn').addEventListener('click', () => addDeviceToChecker('existing'));
                     document.getElementById('addNewDeviceBtn').addEventListener('click', () => addDeviceToChecker('new'));
@@ -564,13 +949,17 @@
                                 <form id="inventoryDeviceForm" class="space-y-5">
                                     <input type="hidden" id="inventoryDeviceId">
                                     <div>
-                                        <label for="inventoryDeviceType" class="block text-sm font-medium text-gray-900 mb-1">Device Type</label>
+                                        <label for="inventoryDeviceTypeSearch" class="block text-sm font-medium text-gray-900 mb-1">Search Device Type</label>
+                                        <input type="text" id="inventoryDeviceTypeSearch" placeholder="Type to filter..." class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                        <label for="inventoryDeviceType" class="block text-sm font-medium text-gray-900 mb-1 mt-2">Device Type</label>
                                         <select id="inventoryDeviceType" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                             <option value="">Select Type</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label for="inventoryDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1">Brand</label>
+                                        <label for="inventoryDeviceBrandSearch" class="block text-sm font-medium text-gray-900 mb-1">Search Brand</label>
+                                        <input type="text" id="inventoryDeviceBrandSearch" placeholder="Type to filter..." class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                        <label for="inventoryDeviceBrand" class="block text-sm font-medium text-gray-900 mb-1 mt-2">Brand</label>
                                         <select id="inventoryDeviceBrand" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200">
                                             <option value="">Select Brand</option>
                                         </select>
@@ -593,6 +982,10 @@
                     `;
                     updateUserInventoryDisplay();
                     populateInventoryDeviceFormDropdowns();
+
+                    // Make inventory dropdowns searchable
+                    makeSelectSearchable('inventoryDeviceType', 'inventoryDeviceTypeSearch');
+                    makeSelectSearchable('inventoryDeviceBrand', 'inventoryDeviceBrandSearch');
 
                     document.getElementById('addNewDeviceToInventoryBtn').addEventListener('click', () => showInventoryDeviceForm('add'));
                     document.getElementById('saveInventoryDeviceBtn').addEventListener('click', saveDeviceToInventory);
@@ -726,6 +1119,99 @@
         // --- Compatibility Checker Functions ---
 
         /**
+         * Function to make a select dropdown searchable by typing into an associated input.
+         * @param {string} selectId The ID of the <select> element.
+         * @param {string} searchInputId The ID of the <input type="text"> element used for searching.
+         */
+        function makeSelectSearchable(selectId, searchInputId) {
+            const selectElement = document.getElementById(selectId);
+            const searchInput = document.getElementById(searchInputId);
+
+            if (!selectElement || !searchInput) return;
+
+            // Store all original options when the page loads
+            let originalOptions = [];
+            // Use a MutationObserver to react to changes in the select's options
+            // This is important because populateDeviceDropdowns() or populateInventoryDeviceFormDropdowns()
+            // might clear and repopulate the select, so we need to re-capture original options.
+            const observer = new MutationObserver(() => {
+                originalOptions = Array.from(selectElement.options).map(opt => ({
+                    value: opt.value,
+                    text: opt.textContent
+                }));
+                // Ensure the current selection is maintained if it's still in the filtered list
+                const currentValue = selectElement.value;
+                filterOptions(currentValue); // Re-apply filter to show selected option if exists
+            });
+
+            // Observe changes to the child list of the select element
+            observer.observe(selectElement, { childList: true });
+
+            // Initial population of originalOptions
+            originalOptions = Array.from(selectElement.options).map(opt => ({
+                value: opt.value,
+                text: opt.textContent
+            }));
+
+            const filterOptions = (filterText) => {
+                const lowerCaseFilter = filterText.toLowerCase();
+                selectElement.innerHTML = ''; // Clear current options
+
+                // Re-add the default "Select Type/Brand" option if it's not filtered out
+                const defaultOption = originalOptions.find(opt => opt.value === "");
+                if (defaultOption && (defaultOption.text.toLowerCase().includes(lowerCaseFilter) || lowerCaseFilter === "")) {
+                    const opt = document.createElement('option');
+                    opt.value = defaultOption.value;
+                    opt.textContent = defaultOption.text;
+                    selectElement.appendChild(opt);
+                }
+
+                // Add filtered options
+                originalOptions.forEach(option => {
+                    if (option.value !== "" && option.text.toLowerCase().includes(lowerCaseFilter)) {
+                        const opt = document.createElement('option');
+                        opt.value = option.value;
+                        opt.textContent = option.text;
+                        selectElement.appendChild(opt);
+                    }
+                });
+
+                // Attempt to select the first matching option if the search input matches it
+                if (selectElement.options.length > 1 && selectElement.options[1].textContent.toLowerCase() === lowerCaseFilter) {
+                    selectElement.value = selectElement.options[1].value;
+                } else if (selectElement.options.length === 1 && selectElement.options[0].value !== "" && selectElement.options[0].textContent.toLowerCase() === lowerCaseFilter) {
+                    selectElement.value = selectElement.options[0].value;
+                } else {
+                    // If the currently selected value is no longer in the filtered list, reset it
+                    if (!Array.from(selectElement.options).some(opt => opt.value === selectElement.value)) {
+                        selectElement.value = "";
+                    }
+                }
+            };
+
+            searchInput.addEventListener('input', () => {
+                filterOptions(searchInput.value);
+            });
+
+            // When the select element gains focus, clear the search input and show all options
+            selectElement.addEventListener('focus', () => {
+                searchInput.value = '';
+                filterOptions(''); // Show all options
+            });
+
+            // When the select element changes, update the search input to reflect the selected value
+            selectElement.addEventListener('change', () => {
+                const selectedOption = selectElement.options[selectElement.selectedIndex];
+                if (selectedOption && selectedOption.value !== "") {
+                    searchInput.value = selectedOption.textContent;
+                } else {
+                    searchInput.value = '';
+                }
+            });
+        }
+
+
+        /**
          * Populates the device type, brand, and connectivity dropdowns/checkboxes
          * for both existing and new device forms in the Compatibility Checker.
          */
@@ -738,8 +1224,13 @@
             const populateSelect = (selectId, options) => {
                 const selectElement = document.getElementById(selectId);
                 if (selectElement) {
-                    selectElement.innerHTML = '<option value="">Select Type</option>'; // Reset for types/brands
-                    if (selectId.includes('Brand')) selectElement.innerHTML = '<option value="">Select Brand</option>';
+                    selectElement.innerHTML = ''; // Clear existing options
+                    const defaultOptionText = selectId.includes('Type') ? "Select Type" : "Select Brand";
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = "";
+                    defaultOption.textContent = defaultOptionText;
+                    selectElement.appendChild(defaultOption);
+
                     options.sort().forEach(option => {
                         const opt = document.createElement('option');
                         opt.value = option;
@@ -778,9 +1269,15 @@
 
         /**
          * Adds a device to the selectedDevicesForCheck array for compatibility comparison.
+         * Handles logic for adding to empty slots or prompting for replacement.
          * @param {'existing'|'new'} type Specifies which form is being used.
          */
         function addDeviceToChecker(type) {
+            if (userState.selectedDevicesForCheck.length >= 2) {
+                showMessage('You can only select up to two devices for comparison. Please remove one first.');
+                return;
+            }
+
             const formPrefix = type === 'existing' ? 'existingDevice' : 'newDevice';
             const deviceType = document.getElementById(`${formPrefix}Type`).value;
             const deviceBrand = document.getElementById(`${formPrefix}Brand`).value;
@@ -821,58 +1318,89 @@
                 selectedDevice.isCustom = false; // Ensure pre-defined devices are marked as such
             }
 
-            // Ensure unique IDs for selected devices in checker
+            // Assign a unique temporary ID for checker UI management
             selectedDevice = { ...selectedDevice,
                 tempId: `${selectedDevice.id}-${type}-${Date.now()}`
             };
 
-            // Prevent adding the same device twice for comparison (based on tempId)
-            if (userState.selectedDevicesForCheck.some(d => d.tempId === selectedDevice.tempId)) {
-                showMessage('This device is already added for comparison.');
+            // Prevent adding the same exact device twice based on its original ID (if not custom)
+            // Or if it's a custom device, prevent adding the same custom device again.
+            const isDuplicate = userState.selectedDevicesForCheck.some(d =>
+                (!d.isCustom && d.id === selectedDevice.id) ||
+                (d.isCustom && d.type === selectedDevice.type && d.brand === selectedDevice.brand && d.model === selectedDevice.model && JSON.stringify(d.ports) === JSON.stringify(selectedDevice.ports) && JSON.stringify(d.wirelessStandards) === JSON.stringify(selectedDevice.wirelessStandards))
+            );
+
+            if (isDuplicate) {
+                showMessage('This exact device is already added for comparison.');
                 return;
             }
 
-            // Add to the list
             userState.selectedDevicesForCheck.push(selectedDevice);
             updateSelectedDevicesDisplay();
-            // Show confirmation message
             showMessage(`Added ${selectedDevice.brand} ${selectedDevice.model || selectedDevice.type} for comparison.`);
 
             // Clear form after adding
             document.getElementById(`${formPrefix}Type`).value = '';
             document.getElementById(`${formPrefix}Brand`).value = '';
             document.getElementById(`${formPrefix}Model`).value = '';
-            connectivityCheckboxes.forEach(cb => cb.checked = false);
+            document.querySelectorAll(`#${formPrefix}ConnectivityCheckboxes input[type="checkbox"]`).forEach(cb => cb.checked = false);
+            document.getElementById(`${formPrefix}TypeSearch`).value = ''; // Clear search input
+            document.getElementById(`${formPrefix}BrandSearch`).value = ''; // Clear search input
+            populateDeviceDropdowns(); // Re-populate dropdowns to show all options after clearing search
         }
 
         /**
          * Updates the display of devices selected for compatibility checking.
          */
         function updateSelectedDevicesDisplay() {
-            const displayArea = document.getElementById('selectedDevicesDisplay');
-            const noDevicesMessage = document.getElementById('noDevicesSelectedMessage');
-            displayArea.innerHTML = ''; // Clear previous display
+            const device1Card = document.getElementById('selectedDevice1Card');
+            const device2Card = document.getElementById('selectedDevice2Card');
 
-            if (userState.selectedDevicesForCheck.length === 0) {
-                noDevicesMessage.classList.remove('hidden');
-            } else {
-                noDevicesMessage.classList.add('hidden');
-                userState.selectedDevicesForCheck.forEach(device => {
-                    const deviceCard = document.createElement('div');
-                    deviceCard.className = 'flex items-center bg-blue-50 text-blue-800 px-4 py-2 rounded-full text-base font-medium shadow-sm';
-                    deviceCard.innerHTML = `
-                        <span>${device.brand} ${device.model || device.type}</span>
-                        <button type="button" data-device-id="${device.tempId}" class="remove-device-btn ml-2 text-blue-600 hover:text-blue-800 focus:outline-none transition-colors duration-200">✖️</button>
-                    `;
-                    displayArea.appendChild(deviceCard);
-                });
+            // Reset cards
+            device1Card.innerHTML = '<p class="text-gray-500 text-center italic">Select your first device</p>';
+            device2Card.innerHTML = '<p class="text-gray-500 text-center italic">Select your second device</p>';
+            device1Card.classList.remove('border-blue-600', 'bg-blue-100');
+            device2Card.classList.remove('border-blue-600', 'bg-blue-100');
+            device1Card.classList.add('bg-blue-50');
+            device2Card.classList.add('bg-blue-50');
 
-                document.querySelectorAll('.remove-device-btn').forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        removeDeviceFromChecker(event.target.dataset.deviceId);
-                    });
-                });
+
+            if (userState.selectedDevicesForCheck.length > 0) {
+                const d1 = userState.selectedDevicesForCheck[0];
+                device1Card.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-lg font-semibold text-blue-800">${d1.brand} ${d1.model || d1.type}</h4>
+                        <button type="button" data-device-temp-id="${d1.tempId}" class="remove-device-btn text-red-500 hover:text-red-700 focus:outline-none">✖️</button>
+                    </div>
+                    <p class="text-sm text-gray-700">Type: ${d1.type}</p>
+                    <p class="text-sm text-gray-700">Ports: ${d1.ports.join(', ') || 'N/A'}</p>
+                    <p class="text-sm text-gray-700">Wireless: ${d1.wirelessStandards.join(', ') || 'N/A'}</p>
+                `;
+                device1Card.classList.add('border-blue-600', 'bg-blue-100');
+                device1Card.classList.remove('bg-blue-50');
             }
+
+            if (userState.selectedDevicesForCheck.length > 1) {
+                const d2 = userState.selectedDevicesForCheck[1];
+                device2Card.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-lg font-semibold text-blue-800">${d2.brand} ${d2.model || d2.type}</h4>
+                        <button type="button" data-device-temp-id="${d2.tempId}" class="remove-device-btn ml-2 text-red-500 hover:text-red-700 focus:outline-none">✖️</button>
+                    </div>
+                    <p class="text-sm text-gray-700">Type: ${d2.type}</p>
+                    <p class="text-sm text-gray-700">Ports: ${d2.ports.join(', ') || 'N/A'}</p>
+                    <p class="text-sm text-gray-700">Wireless: ${d2.wirelessStandards.join(', ') || 'N/A'}</p>
+                `;
+                device2Card.classList.add('border-blue-600', 'bg-blue-100');
+                device2Card.classList.remove('bg-blue-50');
+            }
+
+            // Attach event listeners for remove buttons (re-attaching each time as content changes)
+            document.querySelectorAll('#selectedDevicesContainer .remove-device-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    removeDeviceFromChecker(event.target.dataset.deviceTempId);
+                });
+            });
         }
 
         /**
@@ -882,6 +1410,7 @@
         function removeDeviceFromChecker(tempDeviceId) {
             userState.selectedDevicesForCheck = userState.selectedDevicesForCheck.filter(d => d.tempId !== tempDeviceId);
             updateSelectedDevicesDisplay();
+            showMessage('Device removed from comparison.');
         }
 
         /**
@@ -906,46 +1435,125 @@
             const incompatibleFeatures = [];
             const recommendations = [];
 
+            // Helper to extract base port type (e.g., "USB-C" from "USB-C (Thunderbolt 3)")
+            const getBasePort = (port) => port.split('(')[0].trim();
+
             // Compare Ports
-            const device1Ports = new Set(device1.ports.map(p => p.split('(')[0].trim()));
-            const device2Ports = new Set(device2.ports.map(p => p.split('(')[0].trim()));
+            const device1Ports = new Set(device1.ports.map(getBasePort));
+            const device2Ports = new Set(device2.ports.map(getBasePort));
 
-            for (const port1 of device1Ports) {
-                if (device2Ports.has(port1)) {
-                    matchingFeatures.push(`Both devices support ${port1}.`);
-                } else {
-                    // Check for common adapters
-                    if (port1.includes('USB-C') && (device2Ports.has('HDMI') || device2Ports.has('DisplayPort'))) {
-                        incompatibleFeatures.push(`${device1.brand} ${device1.model || device1.type} has ${port1}, but ${device2.brand} ${device2.model || device2.type} requires HDMI/DisplayPort.`);
-                        recommendations.push(`Recommended: USB-C to HDMI/DisplayPort Adapter (Active)`);
-                        compatibilityStatus = '🔀 Compatible with adapter';
-                        compatibilityColor = 'text-orange-600';
-                    } else if (port1.includes('USB-A') && device2Ports.has('USB-C')) {
-                        incompatibleFeatures.push(`${device1.brand} ${device1.model || device1.type} has ${port1}, but ${device2.brand} ${device2.model || device2.type} primarily uses USB-C.`);
-                        recommendations.push(`Recommended: USB-A to USB-C adapter/cable.`);
-                        compatibilityStatus = '🔀 Compatible with adapter';
-                        compatibilityColor = 'text-orange-600';
-                    } else {
-                        incompatibleFeatures.push(`${device1.brand} ${device1.model || device1.type} has ${port1}, but ${device2.brand} ${device2.model || device2.type} does not.`);
-                        compatibilityStatus = '✖️ Incompatible!';
-                        compatibilityColor = 'text-red-600';
+            // Detailed port compatibility logic
+            const checkPortCompatibility = (portA, portB, deviceA, deviceB) => {
+                // Direct match
+                if (portA === portB) {
+                    return { status: 'match', message: `Both devices support ${portA}.` };
+                }
+
+                // USB-C to Display/HDMI
+                if (portA.includes('USB-C') && (portB.includes('HDMI') || portB.includes('DisplayPort'))) {
+                    return { status: 'adapter', message: `${deviceA.brand} ${deviceA.model || deviceA.type} has ${portA}, which can connect to ${deviceB.brand} ${deviceB.model || deviceB.type}'s ${portB} via adapter.`, recommendation: `USB-C to ${portB} Adapter (Active)` };
+                }
+                if (portB.includes('USB-C') && (portA.includes('HDMI') || portA.includes('DisplayPort'))) {
+                    return { status: 'adapter', message: `${deviceB.brand} ${deviceB.model || deviceB.type} has ${portB}, which can connect to ${deviceA.brand} ${deviceA.model || deviceA.type}'s ${portA} via adapter.`, recommendation: `USB-C to ${portA} Adapter (Active)` };
+                }
+
+                // USB-A to USB-C
+                if (portA.includes('USB-A') && portB.includes('USB-C')) {
+                    return { status: 'adapter', message: `${deviceA.brand} ${deviceA.model || deviceA.type} has ${portA}, compatible with ${deviceB.brand} ${deviceB.model || deviceB.type}'s ${portB} via adapter/cable.`, recommendation: `USB-A to USB-C Adapter/Cable` };
+                }
+                if (portB.includes('USB-A') && portA.includes('USB-C')) {
+                    return { status: 'adapter', message: `${deviceB.brand} ${deviceB.model || deviceB.type} has ${portB}, compatible with ${deviceA.brand} ${deviceA.model || deviceA.type}'s ${portA} via adapter/cable.`, recommendation: `USB-A to USB-C Adapter/Cable` };
+                }
+
+                // Thunderbolt compatibility
+                if (portA.includes('Thunderbolt') && portB.includes('USB-C')) {
+                    return { status: 'match', message: `${deviceA.brand} ${deviceA.model || deviceA.type} (Thunderbolt) is compatible with ${deviceB.brand} ${deviceB.model || deviceB.type} (USB-C).` };
+                }
+                if (portB.includes('Thunderbolt') && portA.includes('USB-C')) {
+                    return { status: 'match', message: `${deviceB.brand} ${deviceB.model || deviceB.type} (Thunderbolt) is compatible with ${deviceA.brand} ${deviceA.model || deviceA.type} (USB-C).` };
+                }
+                if (portA.includes('Thunderbolt') && portB.includes('Thunderbolt')) {
+                    return { status: 'match', message: `Both devices support Thunderbolt.` };
+                }
+
+                // HDMI version compatibility (simplified)
+                if (portA.includes('HDMI') && portB.includes('HDMI')) {
+                    const versionA = parseFloat(portA.replace('HDMI', '').trim()) || 1.4; // Default to 1.4 if no version
+                    const versionB = parseFloat(portB.replace('HDMI', '').trim()) || 1.4;
+                    if (versionA >= versionB || versionB >= versionA) { // Simple check for any version match
+                         matchingFeatures.push(`Both devices support HDMI (versions ${versionA} and ${versionB}).`);
+                         return { status: 'handled' }; // Handled, no new incompatibility
                     }
                 }
-            }
 
-            for (const port2 of device2Ports) {
-                if (!device1Ports.has(port2)) {
-                    // Avoid duplicate incompatibility messages if already covered from device1's perspective
-                    if (!(port2.includes('USB-C') && (device1Ports.has('HDMI') || device1Ports.has('DisplayPort'))) &&
-                        !(port2.includes('USB-A') && device1Ports.has('USB-C'))) {
-                        incompatibleFeatures.push(`${device2.brand} ${device2.model || device2.type} has ${port2}, but ${device1.brand} ${device1.model || device1.type} does not.`);
-                        compatibilityStatus = '✖️ Incompatible!';
-                        compatibilityColor = 'text-red-600';
+                return { status: 'incompatible', message: `${deviceA.brand} ${deviceA.model || deviceA.type} has ${portA}, but ${deviceB.brand} ${deviceB.model || deviceB.type} does not have a compatible port.` };
+            };
+
+            const allPorts = new Set([...device1Ports, ...device2Ports]);
+            allPorts.forEach(port => {
+                const result1 = checkPortCompatibility(port, port, device1, device2); // Check direct match
+                if (result1.status === 'match') {
+                    matchingFeatures.push(result1.message);
+                } else if (result1.status === 'adapter') {
+                    incompatibleFeatures.push(result1.message);
+                    recommendations.push(result1.recommendation);
+                    compatibilityStatus = '🔀 Compatible with adapter';
+                    compatibilityColor = 'text-orange-600';
+                } else if (result1.status === 'incompatible') {
+                    // Check if device1 has port and device2 doesn't have a compatible one
+                    if (device1Ports.has(port) && !device2Ports.has(port)) {
+                        const checkResult = checkPortCompatibility(port, null, device1, device2); // Check if device1's port is compatible with any of device2's
+                        let foundCompatibility = false;
+                        for (const p2 of device2Ports) {
+                            const tempResult = checkPortCompatibility(port, p2, device1, device2);
+                            if (tempResult.status === 'match' || tempResult.status === 'adapter') {
+                                foundCompatibility = true;
+                                if (tempResult.status === 'adapter') {
+                                    incompatibleFeatures.push(tempResult.message);
+                                    recommendations.push(tempResult.recommendation);
+                                    compatibilityStatus = '🔀 Compatible with adapter';
+                                    compatibilityColor = 'text-orange-600';
+                                }
+                                break;
+                            }
+                        }
+                        if (!foundCompatibility) {
+                            incompatibleFeatures.push(`${device1.brand} ${device1.model || device1.type} has ${port}, but ${device2.brand} ${device2.model || device2.type} lacks a compatible port.`);
+                            if (compatibilityStatus !== '✖️ Incompatible!') { // Only change to red if not already red
+                                compatibilityStatus = '✖️ Incompatible!';
+                                compatibilityColor = 'text-red-600';
+                            }
+                        }
+                    }
+                    // Check if device2 has port and device1 doesn't have a compatible one
+                    if (device2Ports.has(port) && !device1Ports.has(port)) {
+                        let foundCompatibility = false;
+                        for (const p1 of device1Ports) {
+                            const tempResult = checkPortCompatibility(p1, port, device1, device2);
+                            if (tempResult.status === 'match' || tempResult.status === 'adapter') {
+                                foundCompatibility = true;
+                                if (tempResult.status === 'adapter') {
+                                    incompatibleFeatures.push(tempResult.message);
+                                    recommendations.push(tempResult.recommendation);
+                                    compatibilityStatus = '🔀 Compatible with adapter';
+                                    compatibilityColor = 'text-orange-600';
+                                }
+                                break;
+                            }
+                        }
+                        if (!foundCompatibility) {
+                            incompatibleFeatures.push(`${device2.brand} ${device2.model || device2.type} has ${port}, but ${device1.brand} ${device1.model || device1.type} lacks a compatible port.`);
+                            if (compatibilityStatus !== '✖️ Incompatible!') { // Only change to red if not already red
+                                compatibilityStatus = '✖️ Incompatible!';
+                                compatibilityColor = 'text-red-600';
+                            }
+                        }
                     }
                 }
-            }
+            });
 
-            // Compare Wireless Standards (simplified)
+
+            // Compare Wireless Standards (simplified for now)
             const device1Wireless = new Set(device1.wirelessStandards.map(s => s.split(' ')[0].trim()));
             const device2Wireless = new Set(device2.wirelessStandards.map(s => s.split(' ')[0].trim()));
 
@@ -954,6 +1562,18 @@
                     matchingFeatures.push(`Both devices support ${std1} wireless standard.`);
                 }
             }
+            // Add more specific wireless compatibility checks (e.g., Wi-Fi 6E is backward compatible with Wi-Fi 6)
+            if (device1Wireless.has('Wi-Fi 6E') && device2Wireless.has('Wi-Fi 6')) {
+                matchingFeatures.push(`${device1.brand} ${device1.model || device1.type} (Wi-Fi 6E) is backward compatible with ${device2.brand} ${device2.model || device2.type} (Wi-Fi 6).`);
+            } else if (device2Wireless.has('Wi-Fi 6E') && device1Wireless.has('Wi-Fi 6')) {
+                matchingFeatures.push(`${device2.brand} ${device2.model || device2.type} (Wi-Fi 6E) is backward compatible with ${device1.brand} ${device1.model || device1.type} (Wi-Fi 6).`);
+            }
+            if (device1Wireless.has('Wi-Fi 7') && (device2Wireless.has('Wi-Fi 6E') || device2Wireless.has('Wi-Fi 6'))) {
+                matchingFeatures.push(`${device1.brand} ${device1.model || device1.type} (Wi-Fi 7) is backward compatible with ${device2.brand} ${device2.model || device2.type} (Wi-Fi 6E/6).`);
+            } else if (device2Wireless.has('Wi-Fi 7') && (device1Wireless.has('Wi-Fi 6E') || device1Wireless.has('Wi-Fi 6'))) {
+                matchingFeatures.push(`${device2.brand} ${device2.model || device2.type} (Wi-Fi 7) is backward compatible with ${device1.brand} ${device1.model || device1.type} (Wi-Fi 6E/6).`);
+            }
+
 
             // Generate report HTML
             let reportHtml = `
@@ -1032,8 +1652,13 @@
             const populateSelect = (selectId, options) => {
                 const selectElement = document.getElementById(selectId);
                 if (selectElement) {
-                    selectElement.innerHTML = '<option value="">Select Type</option>';
-                    if (selectId.includes('Brand')) selectElement.innerHTML = '<option value="">Select Brand</option>';
+                    selectElement.innerHTML = ''; // Clear existing options
+                    const defaultOptionText = selectId.includes('Type') ? "Select Type" : "Select Brand";
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = "";
+                    defaultOption.textContent = defaultOptionText;
+                    selectElement.appendChild(defaultOption);
+
                     options.sort().forEach(option => {
                         const opt = document.createElement('option');
                         opt.value = option;
@@ -1079,6 +1704,9 @@
             const brandSelect = document.getElementById('inventoryDeviceBrand');
             const modelInput = document.getElementById('inventoryDeviceModel');
             const connectivityContainer = document.getElementById('inventoryConnectivityCheckboxes');
+            const typeSearchInput = document.getElementById('inventoryDeviceTypeSearch');
+            const brandSearchInput = document.getElementById('inventoryDeviceBrandSearch');
+
 
             formContainer.classList.remove('hidden');
             formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1089,6 +1717,9 @@
             modelInput.value = '';
             Array.from(connectivityContainer.querySelectorAll('input[type="checkbox"]')).forEach(cb => cb.checked = false);
             deviceIdInput.value = '';
+            typeSearchInput.value = ''; // Clear search input
+            brandSearchInput.value = ''; // Clear search input
+
 
             if (mode === 'add') {
                 formTitle.textContent = 'Add New Device';
@@ -1103,6 +1734,9 @@
                     typeSelect.value = deviceToEdit.type;
                     brandSelect.value = deviceToEdit.brand;
                     modelInput.value = deviceToEdit.model;
+                    typeSearchInput.value = deviceToEdit.type; // Set search input for pre-fill
+                    brandSearchInput.value = deviceToEdit.brand; // Set search input for pre-fill
+
 
                     const allPorts = [...new Set(deviceData.flatMap(d => d.ports))];
                     const allWirelessStandards = [...new Set(deviceData.flatMap(d => d.wirelessStandards))];
