@@ -760,6 +760,7 @@
             // Add to the list
             userState.selectedDevicesForCheck.push(selectedDevice);
             updateSelectedDevicesDisplay();
+            // Show confirmation message
             showMessage(`Added ${selectedDevice.brand} ${selectedDevice.model || selectedDevice.type} for comparison.`);
 
             // Clear form after adding
