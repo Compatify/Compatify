@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -142,6 +142,11 @@
     <main id="contentDiv" class="main-content-area flex-1 p-6 md:p-10 overflow-y-auto">
         <!-- Content will be dynamically loaded here -->
     </main>
+
+    <!-- Site Footer with Copyright Notice -->
+    <footer class="w-full bg-gray-100 text-gray-600 text-center p-4 text-sm border-t border-gray-200 mt-auto">
+        &copy; 2025 Compatify. All rights reserved.
+    </footer>
 
     <script>
         // --- Mock Data ---
@@ -1463,7 +1468,7 @@
             // Or if it's a custom device, prevent adding the same custom device again.
             const isDuplicate = userState.selectedDevicesForCheck.some(d =>
                 (!d.isCustom && d.id === selectedDevice.id) ||
-                (d.isCustom && d.type === selectedDevice.type && d.brand === selectedDevice.brand && d.model === selectedDevice.model && JSON.stringify(d.ports) === JSON.stringify(selectedDevice.ports) && JSON.stringify(d.wirelessStandards) === JSON.stringify(selectedConnectivity))
+                (d.isCustom && d.type === selectedDevice.type && d.brand === selectedDevice.brand && d.model === selectedDevice.model && JSON.stringify(d.ports) === JSON.stringify(selectedConnectivity.filter(c => c.includes('USB') || c.includes('HDMI') || c.includes('DisplayPort') || c.includes('Thunderbolt') || c.includes('Ethernet') || c.includes('Audio Jack') || c.includes('MagSafe') || c.includes('Lightning') || c.includes('Power Port') || c.includes('SD Card Reader') || c.includes('MicroSD Card Reader') || c.includes('Wired Power')))) && JSON.stringify(d.wirelessStandards) === JSON.stringify(selectedConnectivity.filter(c => c.includes('Wi-Fi') || c.includes('Bluetooth') || c.includes('5G') || c.includes('UWB') || c.includes('Thread') || c.includes('Zigbee') || c.includes('LTE'))))
             );
 
             if (isDuplicate) {
