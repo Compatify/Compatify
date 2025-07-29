@@ -94,8 +94,8 @@
                 </a>
             </li>
             <li>
-                <a href="#pricing" class="nav-link flex items-center gap-3 p-3 rounded-md hover:bg-gray-200 transition-colors">
-                    <span class="text-lg">💰</span> <span class="hidden md:inline">Pricing</span>
+                <a href="#monetization" class="nav-link flex items-center gap-3 p-3 rounded-md hover:bg-gray-200 transition-colors">
+                    <span class="text-lg">💸</span> <span class="hidden md:inline">Monetization</span>
                 </a>
             </li>
         </ul>
@@ -239,11 +239,9 @@
 
         // --- Global State ---
         const userState = {
-            isPremiumUser: false,
-            freeChecksUsed: 0,
-            maxFreeChecks: 3,
+            // isPremiumUser, freeChecksUsed, maxFreeChecks removed as all features are now free
             selectedDevicesForCheck: [], // Stores device objects for checker
-            userInventory: [], // Stores device objects for premium users
+            userInventory: [], // Stores device objects for all users
             currentSection: 'home',
             chartInstance: null // To store the Chart.js instance
         };
@@ -270,7 +268,7 @@
          * Hides the custom modal message.
          */
         function hideMessage() {
-            messageModal.classList.add('hidden');
+            modalModal.classList.add('hidden');
         }
 
         /**
@@ -301,7 +299,7 @@
 
         /**
          * Renders the content for the specified section.
-         * Handles premium locks and initializes charts.
+         * Handles initialization of charts.
          * @param {string} sectionId The ID of the section to render (e.g., 'home', 'checker').
          */
         function renderSection(sectionId) {
@@ -321,22 +319,7 @@
                 userState.chartInstance = null;
             }
 
-            // Handle premium sections
-            const premiumSections = ['inventory', 'obsolescence', 'roadmap'];
-            if (premiumSections.includes(sectionId) && !userState.isPremiumUser) {
-                contentDiv.innerHTML = `
-                    <div class="flex flex-col items-center justify-center h-[60vh] text-center p-4">
-                        <span class="text-6xl mb-6">🔒</span>
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">This Feature Requires Premium</h2>
-                        <p class="text-lg text-gray-700 mb-8">Upgrade now to manage your full tech inventory, get detailed obsolescence reports, and unlock personalized upgrade roadmaps!</p>
-                        <button id="upgradeToPremiumBtn" class="bg-blue-600 text-white px-8 py-4 rounded-md text-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg">Upgrade to Premium</button>
-                    </div>
-                `;
-                document.getElementById('upgradeToPremiumBtn').addEventListener('click', () => renderSection('pricing'));
-                return; // Stop rendering the rest of the section
-            }
-
-            // Render content based on sectionId
+            // All sections are now free and accessible
             switch (sectionId) {
                 case 'home':
                     contentDiv.innerHTML = `
@@ -445,8 +428,7 @@
                                     <!-- Selected devices will be displayed here -->
                                     <p class="text-gray-500" id="noDevicesSelectedMessage">No devices selected yet.</p>
                                 </div>
-                                <p id="freeTierLimitMessage" class="text-sm text-gray-600 mb-4">Free users can compare up to 2 devices at a time.</p>
-                                <p id="freeChecksCounter" class="text-sm text-gray-600 mb-4">Checks remaining today: ${userState.maxFreeChecks - userState.freeChecksUsed}/${userState.maxFreeChecks}</p>
+                                <!-- Free tier limits and counters removed -->
                                 <button id="runCompatibilityCheckBtn" class="bg-blue-600 text-white px-6 py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors w-full md:w-auto">Run Compatibility Check</button>
                             </div>
 
@@ -604,57 +586,39 @@
                     });
                     break;
 
-                case 'pricing':
+                case 'monetization': // Renamed from 'pricing'
                     contentDiv.innerHTML = `
                         <div class="max-w-4xl mx-auto px-4 py-8 text-center">
-                            <h2 class="text-3xl font-bold text-gray-900 mb-6">Pricing Plans</h2>
-                            <p class="text-lg text-gray-700 mb-10">Choose the plan that best fits your tech future-proofing needs.</p>
+                            <h2 class="text-3xl font-bold text-gray-900 mb-6">How Compatify is Supported</h2>
+                            <p class="text-lg text-gray-700 mb-10">Compatify offers all its powerful features completely free of charge to help everyone make smarter tech decisions.</p>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <!-- Free Tier Card -->
+                                <!-- Ad-Supported Explanation -->
                                 <div class="bg-gray-100 p-8 rounded-lg shadow-lg flex flex-col items-center border border-gray-200">
-                                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Free Tier</h3>
-                                    <p class="text-4xl font-bold text-blue-600 mb-6">Free</p>
+                                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Ad-Supported Model</h3>
+                                    <p class="text-gray-700 mb-6">To keep Compatify free and accessible, we display relevant advertisements on our site. These ads help cover our operational costs and allow us to continue developing valuable tools for you.</p>
                                     <ul class="text-left space-y-3 text-gray-700 mb-8 flex-grow">
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Basic 2-device compatibility checks</li>
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> 3 checks per day</li>
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Obvious issue flagging</li>
-                                        <li class="flex items-center"><span class="text-red-600 mr-2">❌</span> Full tech inventory management</li>
-                                        <li class="flex items-center"><span class="text-red-600 mr-2">❌</span> Detailed obsolescence reports</li>
-                                        <li class="flex items-center"><span class="text-red-600 mr-2">❌</span> Personalized upgrade roadmaps</li>
+                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> All features are free</li>
+                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> No paywalls, no subscriptions</li>
+                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Supports ongoing development</li>
                                     </ul>
-                                    <button class="bg-gray-300 text-gray-800 px-6 py-3 rounded-md text-lg font-semibold cursor-not-allowed w-full">Current Plan</button>
+                                    <p class="text-sm text-gray-500 mt-auto">Thank you for your understanding and support!</p>
                                 </div>
 
-                                <!-- Premium Tier Card -->
+                                <!-- Affiliate Links / Future Support -->
                                 <div class="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center border-2 border-blue-600 relative">
-                                    <div class="absolute -top-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">BEST VALUE</div>
-                                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Premium Tier</h3>
-                                    <p class="text-4xl font-bold text-blue-600 mb-6">$4.99<span class="text-xl text-gray-500">/month</span></p>
+                                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Affiliate & Future Support</h3>
+                                    <p class="text-gray-700 mb-6">We may also include affiliate links in our recommendations. If you make a purchase through these links, we may earn a small commission at no extra cost to you. This is another way you can support Compatify!</p>
                                     <ul class="text-left space-y-3 text-gray-700 mb-8 flex-grow">
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Unlimited compatibility checks</li>
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Full tech inventory management</li>
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Detailed obsolescence reports</li>
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Personalized upgrade roadmaps</li>
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Advanced insights & driver checks</li>
-                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Priority support</li>
+                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Unbiased product recommendations</li>
+                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Direct support for Compatify</li>
+                                        <li class="flex items-center"><span class="text-green-600 mr-2">✅</span> Helps us keep the lights on</li>
                                     </ul>
-                                    <button id="subscribeNowBtn" class="bg-blue-600 text-white px-6 py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg w-full">Subscribe Now</button>
-                                    <p class="text-sm text-gray-500 mt-4">Invest in peace of mind and smarter tech decisions.</p>
+                                    <p class="text-sm text-gray-500 mt-auto">Your trust is our priority. We only recommend products we believe in.</p>
                                 </div>
                             </div>
                         </div>
                     `;
-                    if (!userState.isPremiumUser) {
-                        document.getElementById('subscribeNowBtn').addEventListener('click', mockSubscribeToPremium);
-                    } else {
-                        // If already premium, disable the button and change text
-                        const subscribeBtn = document.getElementById('subscribeNowBtn');
-                        subscribeBtn.textContent = 'Subscribed!';
-                        subscribeBtn.disabled = true;
-                        subscribeBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                        subscribeBtn.classList.add('bg-green-600', 'cursor-not-allowed');
-                    }
                     break;
             }
         }
@@ -759,11 +723,11 @@
                 tempId: `${selectedDevice.id}-${type}-${Date.now()}`
             };
 
-            // Limit for free users
-            if (!userState.isPremiumUser && userState.selectedDevicesForCheck.length >= userState.maxFreeChecks - 1) {
-                showMessage(`Free users can compare up to ${userState.maxFreeChecks} devices at a time. Upgrade to Premium for unlimited comparisons.`);
-                return;
-            }
+            // No free tier limits anymore
+            // if (!userState.isPremiumUser && userState.selectedDevicesForCheck.length >= userState.maxFreeChecks - 1) {
+            //     showMessage(`Free users can compare up to ${userState.maxFreeChecks} devices at a time. Upgrade to Premium for unlimited comparisons.`);
+            //     return;
+            // }
 
             // Prevent adding the same device twice for comparison (based on tempId)
             if (userState.selectedDevicesForCheck.some(d => d.tempId === selectedDevice.tempId)) {
@@ -830,17 +794,18 @@
             const resultsDisplayArea = document.getElementById('resultsDisplayArea');
             resultsDisplayArea.innerHTML = ''; // Clear previous results
 
-            if (!userState.isPremiumUser && userState.freeChecksUsed >= userState.maxFreeChecks) {
-                resultsDisplayArea.innerHTML = `
-                    <div class="text-center text-red-600">
-                        <p class="text-xl font-semibold mb-4">Daily Free Check Limit Reached!</p>
-                        <p class="mb-4">You have used all ${userState.maxFreeChecks} free checks for today.</p>
-                        <button id="upgradeForMoreChecksBtn" class="bg-blue-600 text-white px-6 py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg">Upgrade to Premium for Unlimited Checks</button>
-                    </div>
-                `;
-                document.getElementById('upgradeForMoreChecksBtn').addEventListener('click', () => renderSection('pricing'));
-                return;
-            }
+            // No free tier limits anymore
+            // if (!userState.isPremiumUser && userState.freeChecksUsed >= userState.maxFreeChecks) {
+            //     resultsDisplayArea.innerHTML = `
+            //         <div class="text-center text-red-600">
+            //             <p class="text-xl font-semibold mb-4">Daily Free Check Limit Reached!</p>
+            //             <p class="mb-4">You have used all ${userState.maxFreeChecks} free checks for today.</p>
+            //             <button id="upgradeForMoreChecksBtn" class="bg-blue-600 text-white px-6 py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg">Upgrade to Premium for Unlimited Checks</button>
+            //         </div>
+            //     `;
+            //     document.getElementById('upgradeForMoreChecksBtn').addEventListener('click', () => renderSection('pricing'));
+            //     return;
+            // }
 
             if (userState.selectedDevicesForCheck.length < 2) {
                 resultsDisplayArea.innerHTML = '<p class="text-red-600">Please select two devices to run a compatibility check.</p>';
@@ -945,32 +910,33 @@
                 `;
             }
 
-            // Premium feature lock within results
-            const advancedScenariosDetected = (device1.notes && device1.notes.includes('driver')) || (device2.notes && device2.notes.includes('driver'));
-            if (!userState.isPremiumUser && advancedScenariosDetected) {
-                reportHtml += `
-                    <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-md mt-6">
-                        <p class="font-bold">Unlock Advanced Insights!</p>
-                        <p class="text-sm">This check involved advanced scenarios (e.g., specific driver versions, complex ecosystem integration) that are premium-only. Upgrade to Premium for deeper analysis!</p>
-                        <button id="upgradeAdvancedBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors mt-3">Upgrade to Premium</button>
-                    </div>
-                `;
-            }
+            // Premium feature lock within results removed
+            // const advancedScenariosDetected = (device1.notes && device1.notes.includes('driver')) || (device2.notes && device2.notes.includes('driver'));
+            // if (!userState.isPremiumUser && advancedScenariosDetected) {
+            //     reportHtml += `
+            //         <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-md mt-6">
+            //             <p class="font-bold">Unlock Advanced Insights!</p>
+            //             <p class="text-sm">This check involved advanced scenarios (e.g., specific driver versions, complex ecosystem integration) that are premium-only. Upgrade to Premium for deeper analysis!</p>
+            //             <button id="upgradeAdvancedBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors mt-3">Upgrade to Premium</button>
+            //         </div>
+            //     `;
+            // }
 
 
             resultsDisplayArea.innerHTML = reportHtml;
 
-            if (!userState.isPremiumUser) {
-                userState.freeChecksUsed++;
-                document.getElementById('freeChecksCounter').textContent = `Checks remaining today: ${userState.maxFreeChecks - userState.freeChecksUsed}/${userState.maxFreeChecks}`;
-            }
+            // Free checks counter removed
+            // if (!userState.isPremiumUser) {
+            //     userState.freeChecksUsed++;
+            //     document.getElementById('freeChecksCounter').textContent = `Checks remaining today: ${userState.maxFreeChecks - userState.freeChecksUsed}/${userState.maxFreeChecks}`;
+            // }
 
-            if (advancedScenariosDetected && !userState.isPremiumUser) {
-                document.getElementById('upgradeAdvancedBtn').addEventListener('click', () => renderSection('pricing'));
-            }
+            // if (advancedScenariosDetected && !userState.isPremiumUser) {
+            //     document.getElementById('upgradeAdvancedBtn').addEventListener('click', () => renderSection('pricing'));
+            // }
         }
 
-        // --- My Tech Inventory Functions (Premium) ---
+        // --- My Tech Inventory Functions (All Users) ---
 
         /**
          * Populates the device type, brand, and connectivity dropdowns/checkboxes
@@ -1211,7 +1177,7 @@
         }
 
 
-        // --- Obsolescence Report Functions (Premium) ---
+        // --- Obsolescence Report Functions (All Users) ---
 
         /**
          * Calculates and displays the obsolescence score for a selected device.
@@ -1323,7 +1289,7 @@
             });
         }
 
-        // --- Upgrade Roadmap Functions (Premium) ---
+        // --- Upgrade Roadmap Functions (All Users) ---
 
         /**
          * Generates and displays a personalized upgrade roadmap.
@@ -1455,17 +1421,8 @@
             });
         }
 
-        // --- Premium Subscription Function ---
-
-        /**
-         * Mocks the subscription process to premium.
-         */
-        function mockSubscribeToPremium() {
-            userState.isPremiumUser = true;
-            showMessage('🥳 You are now a Premium user! All premium features are unlocked.');
-            // Rerender the current section to reflect the premium status
-            renderSection(userState.currentSection);
-        }
+        // --- No subscription function needed anymore ---
+        // function mockSubscribeToPremium() { ... }
 
         // --- Event Listeners ---
         document.addEventListener('DOMContentLoaded', () => {
