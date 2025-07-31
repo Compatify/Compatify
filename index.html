@@ -72,6 +72,21 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
+        /* Style for product cards */
+        .product-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .scroll-container {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .scroll-container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
     </style>
 </head>
 <body class="flex flex-col md:flex-row min-h-screen bg-gray-50 text-gray-800">
@@ -144,6 +159,9 @@
     </main>
 
     <script>
+        // Define the path to your JSON file
+        const AFFILIATE_PRODUCTS_JSON_PATH = './data/affiliate_products.json'; // Adjust this path if your 'data' folder is elsewhere
+
         // --- Mock Data ---
         const deviceData = [
             // Laptops
@@ -1062,6 +1080,17 @@
                             <div id="resultsDisplayArea" class="bg-gray-100 p-8 rounded-xl shadow-md min-h-[250px] flex flex-col items-center justify-center text-center">
                                 <p class="text-gray-500 text-lg">Compatibility results will appear here after you run a check.</p>
                             </div>
+
+                            <section id="recommended-products" class="mt-12">
+                                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Recommended Products</h2>
+                                <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <!-- Products will be dynamically loaded here -->
+                                    <p class="text-gray-500 text-center col-span-full">Run a compatibility check to see recommendations...</p>
+                                </div>
+                                <div id="no-products-message" class="hidden text-center text-gray-600 mt-8 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                                    <p>No specific product recommendations found based on current compatibility results. Check back later or try a different search!</p>
+                                </div>
+                            </section>
                         </div>
                     `;
                     populateDeviceDropdowns();
@@ -1555,7 +1584,7 @@
          * Runs the compatibility check between the selected devices.
          * Generates and displays a detailed report.
          */
-        function runCompatibilityCheck() {
+        async function runCompatibilityCheck() { // Made async to await fetchProducts
             const resultsDisplayArea = document.getElementById('resultsDisplayArea');
             resultsDisplayArea.innerHTML = ''; // Clear previous results
 
@@ -1571,7 +1600,7 @@
             let compatibilityColor = 'text-green-600';
             const matchingFeatures = [];
             const incompatibleFeatures = [];
-            const recommendations = [];
+            const recommendations = []; // For adapters/cables
 
             // Helper to extract base port type (e.g., "USB-C" from "USB-C (Thunderbolt 3)")
             const getBasePort = (port) => port.split('(')[0].trim();
@@ -1589,10 +1618,10 @@
 
                 // USB-C to Display/HDMI
                 if (portA.includes('USB-C') && (portB.includes('HDMI') || portB.includes('DisplayPort'))) {
-                    return { status: 'adapter', message: `${deviceA.brand} ${deviceA.model || deviceA.type} has ${portA}, which can connect to ${deviceB.brand} ${deviceB.model || deviceB.type}'s ${portB} via adapter.`, recommendation: `USB-C to ${portB} Adapter (Active)` };
+                    return { status: 'adapter', message: `${deviceA.brand} ${deviceA.model || deviceA.type} has ${portA}, which can connect to ${deviceB.brand} ${deviceB.model || deviceB.type}'s ${portB} via adapter.`, recommendation: `USB-C to ${portB} Adapter` };
                 }
                 if (portB.includes('USB-C') && (portA.includes('HDMI') || portA.includes('DisplayPort'))) {
-                    return { status: 'adapter', message: `${deviceB.brand} ${deviceB.model || deviceB.type} has ${portB}, which can connect to ${deviceA.brand} ${deviceA.model || deviceA.type}'s ${portA} via adapter.`, recommendation: `USB-C to ${portA} Adapter (Active)` };
+                    return { status: 'adapter', message: `${deviceB.brand} ${deviceB.model || deviceB.type} has ${portB}, which can connect to ${deviceA.brand} ${deviceA.model || deviceA.type}'s ${portA} via adapter.`, recommendation: `USB-C to ${portA} Adapter` };
                 }
 
                 // USB-A to USB-C
@@ -1642,26 +1671,7 @@
                     matchingFeatures.push(result1.message);
                 } else if (result1.status === 'adapter') {
                     incompatibleFeatures.push(result1.message);
-                    
-                    let affiliateLink = '';
-                    if (result1.recommendation.includes('USB-C to HDMI Adapter')) {
-                        affiliateLink = 'https://www.amazon.com/Anker-PowerExpand-Adapter-Portable-Compatible/dp/B08HZ6GS4L?tag=yourassociatetag-20'; // Example link
-                    } else if (result1.recommendation.includes('USB-C to DisplayPort Adapter')) {
-                        affiliateLink = 'https://www.amazon.com/Cable-Matters-DisplayPort-Adapter-Thunderbolt/dp/B07F17ZHJY?tag=yourassociatetag-20'; // Example link
-                    } else if (result1.recommendation.includes('USB-A to USB-C Adapter/Cable')) {
-                        affiliateLink = 'https://www.amazon.com/AmazonBasics-USB-C-Female-Adapter-Black/dp/B07P5R711V?tag=yourassociatetag-20'; // Example link
-                    } else if (result1.recommendation.includes('Lightning to USB-C Adapter/Cable')) {
-                        affiliateLink = 'https://www.amazon.com/Apple-USB-C-Lightning-Cable-2M/dp/B08F22S9F9?tag=yourassociatetag-20'; // Example link
-                    } else if (result1.recommendation.includes('Thunderbolt 3 to Thunderbolt 4 cable')) {
-                        affiliateLink = 'https://www.amazon.com/Cable-Matters-Thunderbolt-Certified-Compatible/dp/B08Y825V8S?tag=yourassociatetag-20'; // Example link
-                    }
-
-                    if (affiliateLink) {
-                        recommendations.push(`💡 <a href="${affiliateLink}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium">${result1.recommendation} (View on Amazon)</a>`);
-                    } else {
-                        recommendations.push(`💡 ${result1.recommendation}`);
-                    }
-
+                    recommendations.push(`💡 ${result1.recommendation}`); // Add to general recommendations
                     compatibilityStatus = '🔀 Compatible with adapter';
                     compatibilityColor = 'text-orange-600';
                 } else if (result1.status === 'incompatible') {
@@ -1675,23 +1685,7 @@
                                 foundCompatibility = true;
                                 if (tempResult.status === 'adapter') {
                                     incompatibleFeatures.push(tempResult.message);
-                                    let affiliateLink = '';
-                                    if (tempResult.recommendation.includes('USB-C to HDMI Adapter')) {
-                                        affiliateLink = 'https://www.amazon.com/Anker-PowerExpand-Adapter-Portable-Compatible/dp/B08HZ6GS4L?tag=yourassociatetag-20'; // Example link
-                                    } else if (tempResult.recommendation.includes('USB-C to DisplayPort Adapter')) {
-                                        affiliateLink = 'https://www.amazon.com/Cable-Matters-DisplayPort-Adapter-Thunderbolt/dp/B07F17ZHJY?tag=yourassociatetag-20'; // Example link
-                                    } else if (tempResult.recommendation.includes('USB-A to USB-C Adapter/Cable')) {
-                                        affiliateLink = 'https://www.amazon.com/AmazonBasics-USB-C-Female-Adapter-Black/dp/B07P5R711V?tag=yourassociatetag-20'; // Example link
-                                    } else if (tempResult.recommendation.includes('Lightning to USB-C Adapter/Cable')) {
-                                        affiliateLink = 'https://www.amazon.com/Apple-USB-C-Lightning-Cable-2M/dp/B08F22S9F9?tag=yourassociatetag-20'; // Example link
-                                    } else if (tempResult.recommendation.includes('Thunderbolt 3 to Thunderbolt 4 cable')) {
-                                        affiliateLink = 'https://www.amazon.com/Cable-Matters-Thunderbolt-Certified-Compatible/dp/B08Y825V8S?tag=yourassociatetag-20'; // Example link
-                                    }
-                                    if (affiliateLink) {
-                                        recommendations.push(`💡 <a href="${affiliateLink}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium">${tempResult.recommendation} (View on Amazon)</a>`);
-                                    } else {
-                                        recommendations.push(`💡 ${tempResult.recommendation}`);
-                                    }
+                                    recommendations.push(`💡 ${tempResult.recommendation}`);
                                     compatibilityStatus = '🔀 Compatible with adapter';
                                     compatibilityColor = 'text-orange-600';
                                 }
@@ -1715,23 +1709,7 @@
                                 foundCompatibility = true;
                                 if (tempResult.status === 'adapter') {
                                     incompatibleFeatures.push(tempResult.message);
-                                    let affiliateLink = '';
-                                    if (tempResult.recommendation.includes('USB-C to HDMI Adapter')) {
-                                        affiliateLink = 'https://www.amazon.com/Anker-PowerExpand-Adapter-Portable-Compatible/dp/B08HZ6GS4L?tag=yourassociatetag-20'; // Example link
-                                    } else if (tempResult.recommendation.includes('USB-C to DisplayPort Adapter')) {
-                                        affiliateLink = 'https://www.amazon.com/Cable-Matters-DisplayPort-Adapter-Thunderbolt/dp/B07F17ZHJY?tag=yourassociatetag-20'; // Example link
-                                    } else if (tempResult.recommendation.includes('USB-A to USB-C Adapter/Cable')) {
-                                        affiliateLink = 'https://www.amazon.com/AmazonBasics-USB-C-Female-Adapter-Black/dp/B07P5R711V?tag=yourassociatetag-20'; // Example link
-                                    } else if (tempResult.recommendation.includes('Lightning to USB-C Adapter/Cable')) {
-                                        affiliateLink = 'https://www.amazon.com/Apple-USB-C-Lightning-Cable-2M/dp/B08F22S9F9?tag=yourassociatetag-20'; // Example link
-                                    } else if (tempResult.recommendation.includes('Thunderbolt 3 to Thunderbolt 4 cable')) {
-                                        affiliateLink = 'https://www.amazon.com/Cable-Matters-Thunderbolt-Certified-Compatible/dp/B08Y825V8S?tag=yourassociatetag-20'; // Example link
-                                    }
-                                    if (affiliateLink) {
-                                        recommendations.push(`💡 <a href="${affiliateLink}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium">${tempResult.recommendation} (View on Amazon)</a>`);
-                                    } else {
-                                        recommendations.push(`💡 ${tempResult.recommendation}`);
-                                    }
+                                    recommendations.push(`💡 ${tempResult.recommendation}`);
                                     compatibilityStatus = '🔀 Compatible with adapter';
                                     compatibilityColor = 'text-orange-600';
                                 }
@@ -1807,11 +1785,69 @@
                 reportHtml += `
                     <h4 class="text-xl font-semibold text-gray-900 mb-3">Suggested Adapters/Cables:</h4>
                     <ul class="list-disc list-inside space-y-2 mb-6 pl-5">
-                        ${recommendations.map(r => `<li class="text-blue-700">💡 ${r}</li>`).join('')}
+                        ${recommendations.map(r => `<li class="text-blue-700">${r}</li>`).join('')}
                     </ul>
                 `;
             }
             resultsDisplayArea.innerHTML = reportHtml;
+
+            // --- Populate global compatibility results for product recommendations ---
+            window.myCompatToolResults = {
+                needs: [], // Initialize as empty array
+                issues: [] // Initialize as empty array
+            };
+
+            // Convert your 'recommendations' into 'needs' for product filtering
+            recommendations.forEach(rec => {
+                // Extract relevant tags from the recommendation string
+                if (rec.includes('USB-C to HDMI Adapter')) {
+                    window.myCompatToolResults.needs.push('USB-C', 'HDMI', 'Display', 'Video');
+                } else if (rec.includes('USB-C to DisplayPort Adapter')) {
+                    window.myCompatToolResults.needs.push('USB-C', 'DisplayPort', 'Display', 'Video');
+                } else if (rec.includes('USB-A to USB-C Adapter/Cable')) {
+                    window.myCompatToolResults.needs.push('USB-A', 'USB-C', 'Data Transfer', 'Charging Adapter');
+                } else if (rec.includes('Lightning to USB-C Adapter/Cable')) {
+                    window.myCompatToolResults.needs.push('Lightning', 'USB-C', 'Apple MFi Certified', 'Fast Charging');
+                } else if (rec.includes('USB-C hub with multiple ports')) {
+                    window.myCompatToolResults.needs.push('USB-C Hub', 'HDMI', 'USB-A', 'Ethernet', 'Power Delivery');
+                } else if (rec.includes('External SSD')) {
+                    window.myCompatToolResults.needs.push('SSD', 'Storage', 'External Drive', 'USB-C');
+                } else if (rec.includes('Wireless earbuds')) {
+                    window.myCompatToolResults.needs.push('Bluetooth', 'Audio', 'Earbuds', 'Wireless');
+                } else if (rec.includes('4K 120Hz TV/Monitor with HDMI 2.1')) {
+                    window.myCompatToolResults.needs.push('4K', '120Hz', 'HDMI 2.1', 'Monitor', 'Smart TV');
+                } else if (rec.includes('Wi-Fi 6E') || rec.includes('Wi-Fi 7')) {
+                    window.myCompatToolResults.needs.push('Wi-Fi 6E', 'Wi-Fi 7', 'Wireless', 'Network');
+                }
+                // Add more conditions here for other types of recommendations/needs
+            });
+
+            // You might also want to add tags based on `incompatibleFeatures` directly
+            incompatibleFeatures.forEach(issue => {
+                if (issue.includes('lacks a compatible port') && issue.includes('USB-C')) {
+                    window.myCompatToolResults.needs.push('USB-C', 'Adapter', 'Hub');
+                }
+                if (issue.includes('older Wi-Fi standard')) {
+                    window.myCompatToolResults.needs.push('Wi-Fi 6E', 'Wi-Fi 7', 'Wireless', 'Network');
+                }
+                if (issue.includes('Lightning port') && issue.includes('USB-C')) {
+                    window.myCompatToolResults.needs.push('Lightning', 'USB-C', 'Adapter', 'Cable');
+                }
+                if (issue.includes('No headphone jack')) {
+                    window.myCompatToolResults.needs.push('3.5mm Jack', 'Adapter', 'Wireless', 'Audio', 'Earbuds');
+                }
+                // Add more logic to map `incompatibleFeatures` to relevant product tags
+            });
+
+            // Ensure unique needs
+            window.myCompatToolResults.needs = [...new Set(window.myCompatToolResults.needs)];
+            console.log("myCompatToolResults:", window.myCompatToolResults); // For debugging
+
+            // Then, re-run the product display to update recommendations based on new results
+            const allProducts = await fetchProducts(); // Re-fetch to ensure latest data if needed, or use cached
+            const filteredProducts = filterProducts(allProducts, window.myCompatToolResults);
+            displayProducts(filteredProducts);
+
 
             // Add Share Results button if both devices are pre-defined
             if (!device1.isCustom && !device2.isCustom) {
@@ -1832,6 +1868,116 @@
                 resultsDisplayArea.appendChild(shareMessage);
             }
         }
+
+        /**
+         * Fetches product data from the specified JSON file.
+         * @returns {Promise<Array>} A promise that resolves to an array of product objects.
+         */
+        async function fetchProducts() {
+            try {
+                const response = await fetch(AFFILIATE_PRODUCTS_JSON_PATH);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const products = await response.json();
+                console.log('Products loaded:', products);
+                return products;
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                const productsContainer = document.getElementById('products-container');
+                const noProductsMessage = document.getElementById('no-products-message');
+                if (productsContainer) {
+                    productsContainer.innerHTML = `
+                        <p class="text-red-500 text-center col-span-full">
+                            Failed to load product recommendations. Please check the console for details.
+                        </p>
+                    `;
+                }
+                if (noProductsMessage) {
+                    noProductsMessage.classList.remove('hidden'); // Show message if loading fails
+                }
+                return [];
+            }
+        }
+
+        /**
+         * Renders a single product card to the DOM.
+         * @param {Object} product - The product object to render.
+         * @returns {string} The HTML string for the product card.
+         */
+        function renderProductCard(product) {
+            return `
+                <div class="product-card bg-white rounded-lg shadow-md overflow-hidden flex flex-col p-4 border border-gray-200">
+                    <img src="${product.image_url}" alt="${product.name}" class="w-full h-32 object-contain mb-4 rounded-md bg-gray-50 p-2" onerror="this.onerror=null;this.src='https://placehold.co/150x150/CCCCCC/333333?text=No+Image';">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">${product.name}</h3>
+                    <p class="text-gray-600 text-sm flex-grow mb-3">${product.description}</p>
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        ${product.compatibility_tags.map(tag => `<span class="bg-indigo-100 text-indigo-700 text-xs font-medium px-2.5 py-0.5 rounded-full">${tag}</span>`).join('')}
+                    </div>
+                    <a href="${product.affiliate_link}" target="_blank" rel="noopener noreferrer"
+                       class="mt-auto block text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+                        View Product
+                    </a>
+                </div>
+            `;
+        }
+
+        /**
+         * Displays products in the products-container.
+         * @param {Array} products - An array of product objects to display.
+         */
+        function displayProducts(products) {
+            const productsContainer = document.getElementById('products-container');
+            const noProductsMessage = document.getElementById('no-products-message');
+
+            if (!productsContainer || !noProductsMessage) {
+                console.warn("Product display containers not found. Skipping product display.");
+                return;
+            }
+
+            if (products.length === 0) {
+                productsContainer.innerHTML = ''; // Clear any loading messages
+                noProductsMessage.classList.remove('hidden');
+            } else {
+                productsContainer.innerHTML = products.map(renderProductCard).join('');
+                noProductsMessage.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Filters products based on compatibility issues or device information.
+         *
+         * @param {Array} allProducts - The complete list of products.
+         * @param {Object} compatifyResults - The output from your compatifytools.
+         * This object's structure depends on your tool.
+         * Example: { needs: ['USB-C', 'HDMI'], issues: ['old_bluetooth'] }
+         * @returns {Array} An array of filtered product objects.
+         */
+        function filterProducts(allProducts, compatifyResults) {
+            const neededTags = new Set(compatifyResults.needs || []);
+            const issueTags = new Set(compatifyResults.issues || []);
+
+            let recommended = [];
+
+            if (neededTags.size > 0 || issueTags.size > 0) {
+                recommended = allProducts.filter(product => {
+                    // Check if any product tag matches a 'needed' tag
+                    const matchesNeeded = product.compatibility_tags.some(tag => neededTags.has(tag));
+                    // Check if any product tag addresses an 'issue' (e.g., "Bluetooth 5.0 USB Adapter" addresses "old_bluetooth_version")
+                    const addressesIssue = product.compatibility_tags.some(tag => issueTags.has(tag));
+
+                    return matchesNeeded || addressesIssue;
+                });
+            } else {
+                // If no specific needs/issues, perhaps show some general recommendations
+                // For now, return an empty array if no specific criteria from checker.
+                console.log("No specific compatibility needs detected, no products filtered by checker.");
+                return []; // Return empty if no specific needs/issues
+            }
+
+            return recommended;
+        }
+
 
         // --- My Tech Inventory Functions (All Users) ---
 
@@ -2399,7 +2545,7 @@
         }
 
         // --- Event Listeners ---
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => { // Made async here
             // Check if a specific section is indicated in the URL hash on initial load
             const initialHash = window.location.hash;
             if (initialHash) {
@@ -2407,6 +2553,16 @@
                 renderSection(sectionId);
             } else {
                 renderSection('home'); // Render homepage on load
+            }
+
+            // Initial load of products for the "Recommended Products" section if it's visible on load
+            // This is important if you land directly on the checker page via URL or if you want
+            // to display general recommendations before a check is run.
+            // However, for this setup, we want recommendations to appear *after* a check.
+            // So, we'll ensure the product section is initially empty or has a prompt.
+            const productsContainer = document.getElementById('products-container');
+            if (productsContainer) {
+                 productsContainer.innerHTML = '<p class="text-gray-500 text-center col-span-full">Run a compatibility check to see recommendations...</p>';
             }
 
 
