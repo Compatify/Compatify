@@ -1605,10 +1605,6 @@
             // Helper to extract base port type (e.g., "USB-C" from "USB-C (Thunderbolt 3)")
             const getBasePort = (port) => port.split('(')[0].trim();
 
-            // Compare Ports
-            const device1Ports = new Set(device1.ports.map(getBasePort));
-            const device2Ports = new Set(device2.ports.map(getBasePort));
-
             // Detailed port compatibility logic
             const checkPortCompatibility = (portA, portB, deviceA, deviceB) => {
                 // Direct match
@@ -1794,7 +1790,9 @@
             // --- Populate global compatibility results for product recommendations ---
             window.myCompatToolResults = {
                 needs: [], // Initialize as empty array
-                issues: [] // Initialize as empty array
+                issues: [], // Initialize as empty array
+                device1: device1, // Pass device1 object
+                device2: device2  // Pass device2 object
             };
 
             // Convert your 'recommendations' into 'needs' for product filtering
@@ -1945,37 +1943,78 @@
         }
 
         /**
-         * Filters products based on compatibility issues or device information.
+         * Filters products based on compatibility issues or device information, with fallbacks.
          *
          * @param {Array} allProducts - The complete list of products.
-         * @param {Object} compatifyResults - The output from your compatifytools.
-         * This object's structure depends on your tool.
-         * Example: { needs: ['USB-C', 'HDMI'], issues: ['old_bluetooth'] }
+         * @param {Object} compatifyResults - The output from your compatifytools, including needs, issues, and device objects.
          * @returns {Array} An array of filtered product objects.
          */
         function filterProducts(allProducts, compatifyResults) {
             const neededTags = new Set(compatifyResults.needs || []);
             const issueTags = new Set(compatifyResults.issues || []);
+            const device1 = compatifyResults.device1;
+            const device2 = compatifyResults.device2;
 
             let recommended = [];
 
+            // --- Primary Filter: Based on specific compatibility needs/issues ---
             if (neededTags.size > 0 || issueTags.size > 0) {
                 recommended = allProducts.filter(product => {
-                    // Check if any product tag matches a 'needed' tag
                     const matchesNeeded = product.compatibility_tags.some(tag => neededTags.has(tag));
-                    // Check if any product tag addresses an 'issue' (e.g., "Bluetooth 5.0 USB Adapter" addresses "old_bluetooth_version")
                     const addressesIssue = product.compatibility_tags.some(tag => issueTags.has(tag));
-
                     return matchesNeeded || addressesIssue;
                 });
-            } else {
-                // If no specific needs/issues, perhaps show some general recommendations
-                // For now, return an empty array if no specific criteria from checker.
-                console.log("No specific compatibility needs detected, no products filtered by checker.");
-                return []; // Return empty if no specific needs/issues
+                if (recommended.length > 0) {
+                    console.log("Products found via primary filter (needs/issues):", recommended);
+                    return recommended;
+                }
             }
 
-            return recommended;
+            // --- First Fallback: Based on general device attributes if primary filter yields no results ---
+            if (recommended.length === 0 && device1 && device2) {
+                const fallbackTags = new Set();
+                // Tags to avoid for broad recommendations (adjust as needed)
+                const genericTagsToRemove = new Set(["General", "Accessory", "Universal", "Adapter", "Cable", "Charger"]);
+
+                // Helper to add relevant tags from a device
+                const addDeviceTags = (device) => {
+                    if (device.type) fallbackTags.add(device.type);
+                    if (device.brand) fallbackTags.add(device.brand);
+                    if (device.model) fallbackTags.add(device.model); // Consider adding model if products are very model-specific
+                    device.ports.forEach(p => fallbackTags.add(p.split('(')[0].trim())); // Add base port types
+                    device.wirelessStandards.forEach(ws => fallbackTags.add(ws.split(' ')[0].trim())); // Add base wireless standards
+                };
+
+                addDeviceTags(device1);
+                addDeviceTags(device2);
+
+                // Remove generic tags to keep recommendations more focused
+                genericTagsToRemove.forEach(tag => fallbackTags.delete(tag));
+
+                console.log("Fallback tags from devices:", [...fallbackTags]);
+
+                if (fallbackTags.size > 0) {
+                    recommended = allProducts.filter(product => {
+                        return product.compatibility_tags.some(tag => fallbackTags.has(tag));
+                    });
+                    if (recommended.length > 0) {
+                        console.log("Products found via first fallback (device attributes):", recommended);
+                        return recommended;
+                    }
+                }
+            }
+
+            // --- Second Fallback: Return a random product if no specific or attribute-based recommendations ---
+            if (recommended.length === 0 && allProducts.length > 0) {
+                const randomIndex = Math.floor(Math.random() * allProducts.length);
+                recommended.push(allProducts[randomIndex]);
+                console.log("No specific recommendations, returning a random product:", recommended[0]);
+                return recommended;
+            }
+
+            // If all else fails (e.g., no products in JSON or no devices selected), return empty
+            console.log("No products found through any filtering method.");
+            return [];
         }
 
 
