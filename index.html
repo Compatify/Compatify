@@ -21,484 +21,899 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f9fafb; /* Lighter background for the entire page */
+            background-color: #f9fafb; /* bg-gray-50 */
+            color: #374151; /* text-gray-700 */
         }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 1rem;
+        /* Custom styles for navigation on mobile (bottom bar) */
+        @media (max-width: 767px) {
+            .sidebar-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                justify-content: space-around;
+                border-top: 1px solid #e5e7eb; /* border-gray-200 */
+                z-index: 50;
+                padding: 0.5rem 0;
+            }
+            .sidebar-nav a {
+                flex: 1;
+                text-align: center;
+                padding: 0.75rem 0.5rem;
+                font-size: 0.75rem; /* text-xs */
+            }
+            .main-content-area {
+                margin-bottom: 4rem; /* To prevent content from being hidden by bottom nav */
+            }
         }
-        .section {
-            display: none; /* Hide all sections by default */
+        /* Chart container styling for responsiveness */
+        .chart-container {
+            position: relative;
+            height: 300px; /* Fixed height for the chart */
+            width: 100%;
+            max-width: 600px; /* Optional max-width for larger screens */
+            margin: 0 auto; /* Center the chart */
         }
-        .section.active {
-            display: block; /* Show the active section */
+        /* Refined active navigation link style */
+        .nav-link.active-link {
+            background-color: #2563eb; /* bg-blue-600 */
+            color: #ffffff; /* text-white */
+            font-weight: 600; /* semibold */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* subtle shadow */
         }
-        .nav-link.active {
-            font-weight: 700;
-            color: #1f2937;
-            border-bottom: 2px solid #2563eb;
+        /* Subtle hover effect for cards */
+        .card-hover-effect {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        /* Style for product cards */
+        .product-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .scroll-container {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .scroll-container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
         }
     </style>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
-    <!-- Navigation Bar -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4 md:flex md:justify-between md:items-center">
-            <a href="#" class="text-xl font-bold text-gray-800 md:text-2xl hover:text-gray-700">Compatify</a>
-            <div class="flex-1 flex justify-center mt-4 md:mt-0">
-                <div class="flex space-x-4">
-                    <a href="#home" class="nav-link text-gray-600 hover:text-gray-800 transition-colors duration-200 p-2">Home</a>
-                    <a href="#checker" class="nav-link text-gray-600 hover:text-gray-800 transition-colors duration-200 p-2">Checker</a>
-                    <a href="#roadmap" class="nav-link text-gray-600 hover:text-gray-800 transition-colors duration-200 p-2">Roadmap</a>
-                    <a href="#about" class="nav-link text-gray-600 hover:text-gray-800 transition-colors duration-200 p-2">About</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+<body class="flex flex-col md:flex-row min-h-screen bg-gray-50 text-gray-800">
 
-    <!-- Main Content -->
-    <main class="flex-grow container mx-auto p-6">
-        <!-- Home Section -->
-        <section id="home" class="section active">
-            <div class="bg-white p-8 rounded-lg shadow-md">
-                <h1 class="text-4xl font-bold text-gray-800 mb-4">Welcome to Compatify</h1>
-                <p class="text-gray-600 mb-6">Your ultimate tool for checking device compatibility and planning your tech upgrades. Use the sections above to get started.</p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-                    <div class="p-6 rounded-lg shadow-sm bg-blue-50">
-                        <h3 class="text-xl font-semibold mb-2 text-blue-800">Compatibility Checker</h3>
-                        <p class="text-gray-700">Quickly see if two devices work together.</p>
-                    </div>
-                    <div class="p-6 rounded-lg shadow-sm bg-green-50">
-                        <h3 class="text-xl font-semibold mb-2 text-green-800">Upgrade Roadmap</h3>
-                        <p class="text-gray-700">Plan your tech future with a personalized roadmap.</p>
-                    </div>
-                    <div class="p-6 rounded-lg shadow-sm bg-purple-50">
-                        <h3 class="text-xl font-semibold mb-2 text-purple-800">Obsolescence Risk</h3>
-                        <p class="text-gray-700">Understand the risks of your current tech setup.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Compatibility Checker Section -->
-        <section id="checker" class="section">
-            <div class="bg-white p-8 rounded-lg shadow-md">
-                <h2 class="text-3xl font-bold text-gray-800 mb-6">Compatibility Checker</h2>
-                
-                <form id="checker-form" class="space-y-6">
-                    <div>
-                        <label for="device1-input" class="block text-sm font-medium text-gray-700">Describe Device 1:</label>
-                        <textarea id="device1-input" name="device1-input" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2" placeholder="e.g., 'MacBook Pro 2021 with M1 Pro chip, 2x USB-C ports with Thunderbolt 4, 1x HDMI 2.0'"></textarea>
-                    </div>
-                    
-                    <div>
-                        <label for="device2-input" class="block text-sm font-medium text-gray-700">Describe Device 2:</label>
-                        <textarea id="device2-input" name="device2-input" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2" placeholder="e.g., '4K Monitor with HDMI 2.1, DisplayPort 1.4, USB-C Power Delivery 65W'"></textarea>
-                    </div>
-
-                    <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Run Compatibility Check
-                    </button>
-                </form>
-
-                <div id="results-container" class="mt-8 p-4 bg-gray-50 rounded-lg shadow-inner text-center">
-                    <div id="loading-indicator" class="hidden flex items-center justify-center space-x-2">
-                        <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <span class="text-blue-600 font-medium">Checking compatibility...</span>
-                    </div>
-                    <p id="placeholder-text" class="text-gray-500">Compatibility results will appear here after you run a check.</p>
-                </div>
-                
-                <!-- Recommended Products Section -->
-                <div class="mt-8">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Recommended Products</h3>
-                    <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <p class="text-gray-500 text-center col-span-full">Run a compatibility check to see recommendations...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Roadmap Section -->
-        <section id="roadmap" class="section">
-            <div class="bg-white p-8 rounded-lg shadow-md">
-                <h2 class="text-3xl font-bold text-gray-800 mb-6">Upgrade Roadmap</h2>
-                <div id="roadmap-steps-container" class="space-y-6">
-                    <div class="p-6 rounded-lg bg-gray-50 shadow-inner">
-                        <p class="text-gray-500 text-center">Your personalized roadmap will appear here.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="about" class="section">
-            <div class="bg-white p-8 rounded-lg shadow-md">
-                <h2 class="text-3xl font-bold text-gray-800 mb-6">About Compatify</h2>
-                <p class="text-gray-600">Compatify is a tool designed to help you make informed decisions about your tech purchases by checking compatibility and providing future-proof upgrade paths.</p>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white mt-auto py-6">
-        <div class="container mx-auto px-4 text-center">
-            <p>&copy; 2024 Compatify. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Modal for messages -->
-    <div id="message-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center p-4 z-[9999]">
-        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
-            <div class="flex justify-between items-center mb-4">
-                <h4 id="modal-title" class="text-lg font-bold">Message</h4>
-                <button id="modal-close-button" class="text-gray-500 hover:text-gray-800">&times;</button>
-            </div>
-            <p id="modal-message" class="text-gray-600"></p>
+    <!-- Message Modal -->
+    <div id="messageModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full text-center transform transition-all duration-300 ease-out scale-95 opacity-0" id="modalContent">
+            <p id="modalMessage" class="text-gray-900 text-lg font-semibold mb-4"></p>
+            <button id="modalCloseButton" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-md">OK</button>
         </div>
     </div>
 
+    <!-- Replace Device Modal -->
+    <div id="replaceDeviceModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full text-center transform transition-all duration-300 ease-out scale-95 opacity-0" id="replaceModalContent">
+            <p class="text-gray-900 text-lg font-semibold mb-4">Two devices are already selected. Which one would you like to replace?</p>
+            <div class="flex flex-col gap-3">
+                <button id="replaceDevice1Btn" class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors shadow-md">Replace Device 1</button>
+                <button id="replaceDevice2Btn" class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors shadow-md">Replace Device 2</button>
+                <button id="cancelReplaceBtn" class="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-400 transition-colors shadow-md">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation (Desktop) / Bottom Navigation (Mobile) -->
+    <nav class="sidebar-nav bg-gray-100 md:w-64 p-4 flex flex-col md:flex-col items-center shadow-lg md:shadow-none md:border-r border-gray-200">
+        <div class="mb-8 md:mb-12 text-center md:text-left w-full">
+            <!-- Compatify Logo with Alt Text -->
+            <img src="Compatify-logo.PNG" alt="Compatify Logo - Device Compatibility Solutions" class="h-16 w-auto mx-auto md:mx-0 mb-4">
+            <h1 class="text-3xl font-bold text-gray-900 mb-1">Compatify</h1>
+            <p class="text-sm text-gray-500">Future-Proof Your Devices with the Power of AI</p>
+        </div>
+        <ul class="flex md:flex-col gap-2 md:gap-3 w-full">
+            <li>
+                <a href="#home" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors active-link">
+                    <span class="text-xl">🌐</span> <span class="hidden md:inline text-base">Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="#checker" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors">
+                    <span class="text-xl">🔬</span> <span class="hidden md:inline text-base">Compatibility Checker</span>
+                </a>
+            </li>
+            <li>
+                <a href="#inventory" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors">
+                    <span class="text-xl">🗄️</span> <span class="hidden md:inline text-base">My Tech Inventory</span>
+                </a>
+            </li>
+            <li>
+                <a href="#obsolescence" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors">
+                    <span class="text-xl">📈</span> <span class="hidden md:inline text-base">Obsolescence Report</span>
+                </a>
+            </li>
+            <li>
+                <a href="#roadmap" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors">
+                    <span class="text-xl">🧭</span> <span class="hidden md:inline text-base">Upgrade Roadmap</span>
+                </a>
+            </li>
+            <li>
+                <a href="#monetization" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition-colors">
+                    <span class="text-xl">💲</span> <span class="hidden md:inline text-base">Monetization</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main id="contentDiv" class="main-content-area flex-1 p-6 md:p-10 overflow-y-auto">
+        <!-- Content will be dynamically loaded here -->
+    </main>
+
     <script>
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('.section');
-        const modal = document.getElementById('message-modal');
-        const modalCloseButton = document.getElementById('modal-close-button');
-        const modalTitle = document.getElementById('modal-title');
-        const modalMessage = document.getElementById('modal-message');
+        // Define the path to your JSON file. This is a relative path that will work on GitHub Pages
+        const AFFILIATE_PRODUCTS_JSON_PATH = './affiliate_products.json';
 
-        // Global variable to hold the product data once it's fetched
-        let productData = [];
-
-        // --- Mock Data for Roadmap (for demonstration) ---
-        const mockRoadmapData = [
+        // --- Mock Data ---
+        const deviceData = [
+            // Laptops
             {
-                title: "Step 1: Assess Your Current Setup",
-                description: "Identify all primary devices and their key specifications.",
-                status: "completed",
+                id: 'macbook-pro-m1-2020',
+                type: 'Laptop',
+                brand: 'Apple',
+                model: 'MacBook Pro M1 (2020)',
+                releaseYear: 2020,
+                ports: ['USB-C (Thunderbolt 3) x2', '3.5mm Audio Jack'],
+                wirelessStandards: ['Wi-Fi 6', 'Bluetooth 5.0'],
+                osCompatibility: ['macOS 11+', 'Windows (Boot Camp/Parallels)'],
+                notes: "Excellent performance, but limited port selection. Thunderbolt 3 ports support DisplayPort Alt Mode.",
+                futureProofingScore: 85,
+                obsolescenceFactors: ['Limited native port diversity', 'Wi-Fi 6 not the latest (Wi-Fi 7 available)'],
+                recommendedUpgrades: ['USB-C hub with multiple ports (USB-A, HDMI, Ethernet)', 'External SSD for expanded storage']
             },
             {
-                title: "Step 2: Check Key Compatibilities",
-                description: "Use the Compatibility Checker to verify core device interoperability.",
-                status: "in-progress",
+                id: 'dell-xps-15-9530',
+                type: 'Laptop',
+                brand: 'Dell',
+                model: 'XPS 15 (9530)',
+                releaseYear: 2023,
+                ports: ['Thunderbolt 4 x2', 'USB-C 3.2 Gen 2', 'SD Card Reader', '3.5mm Audio Jack'],
+                wirelessStandards: ['Wi-Fi 6E', 'Bluetooth 5.2'],
+                osCompatibility: ['Windows 11'],
+                notes: "Powerful Windows laptop with great display and modern connectivity.",
+                futureProofingScore: 92,
+                obsolescenceFactors: ['No USB-A ports natively'],
+                recommendedUpgrades: ['USB-C to USB-A adapter for legacy peripherals']
             },
             {
-                title: "Step 3: Research Potential Upgrades",
-                description: "Explore future-proof products that match your needs and existing tech.",
-                status: "pending",
-                products: ["Product A", "Product B", "Product C"]
+                id: 'hp-spectre-x360-14',
+                type: 'Laptop',
+                brand: 'HP',
+                model: 'Spectre x360 14 (2023)',
+                releaseYear: 2023,
+                ports: ['Thunderbolt 4 x2', 'USB-A 3.1 Gen 1', '3.5mm Audio Jack'],
+                wirelessStandards: ['Wi-Fi 6E', 'Bluetooth 5.3'],
+                osCompatibility: ['Windows 11'],
+                notes: "Premium convertible laptop with excellent display and modern connectivity.",
+                futureProofingScore: 95,
+                obsolescenceFactors: [],
+                recommendedUpgrades: []
             },
             {
-                title: "Step 4: Create an Upgrade Budget",
-                description: "Allocate funds for new purchases and plan your spending.",
-                status: "pending"
-            }
+                id: 'lenovo-thinkpad-x1-carbon-gen-10',
+                type: 'Laptop',
+                brand: 'Lenovo',
+                model: 'ThinkPad X1 Carbon Gen 10',
+                releaseYear: 2022,
+                ports: ['Thunderbolt 4 x2', 'USB-A 3.2 Gen 1 x2', 'HDMI 2.0', '3.5mm Audio Jack', 'Ethernet (via adapter)'],
+                wirelessStandards: ['Wi-Fi 6E', 'Bluetooth 5.2'],
+                osCompatibility: ['Windows 11', 'Linux'],
+                notes: "Business-class laptop with robust build and comprehensive ports.",
+                futureProofingScore: 90,
+                obsolescenceFactors: ['Slightly older CPU compared to latest models'],
+                recommendedUpgrades: []
+            },
+            // Monitors
+            {
+                id: 'dell-ultrasharp-u2723qe',
+                type: 'Monitor',
+                brand: 'Dell',
+                model: 'UltraSharp U2723QE',
+                releaseYear: 2022,
+                ports: ['DisplayPort 1.4', 'HDMI 2.0', 'USB-C (90W PD)', 'USB-A 3.2 Gen 2 x5', 'Ethernet'],
+                wirelessStandards: [],
+                osCompatibility: ['Universal'],
+                notes: "High-resolution monitor with excellent color accuracy and extensive ports, including a USB-C hub.",
+                futureProofingScore: 95,
+                obsolescenceFactors: [],
+                recommendedUpgrades: []
+            },
+            {
+                id: 'lg-ultrafine-5k',
+                type: 'Monitor',
+                brand: 'LG',
+                model: 'UltraFine 5K',
+                releaseYear: 2019,
+                ports: ['Thunderbolt 3', 'USB-C 3.0 x3'],
+                wirelessStandards: [],
+                osCompatibility: ['Universal'],
+                notes: "Designed for Apple Macs. Excellent display quality but limited port options and older release date.",
+                futureProofingScore: 70,
+                obsolescenceFactors: ['Thunderbolt 3 not the latest (Thunderbolt 4/5 available)', 'No HDMI/DisplayPort'],
+                recommendedUpgrades: ['USB-C to HDMI/DisplayPort adapter for other devices']
+            },
+            // Smartphones
+            {
+                id: 'iphone-15-pro',
+                type: 'Smartphone',
+                brand: 'Apple',
+                model: 'iPhone 15 Pro',
+                releaseYear: 2023,
+                ports: ['USB-C (Thunderbolt/USB 3)'],
+                wirelessStandards: ['Wi-Fi 6E', 'Bluetooth 5.3'],
+                osCompatibility: ['iOS 17+'],
+                notes: "Modern connectivity with USB-C. Excellent camera and performance.",
+                futureProofingScore: 90,
+                obsolescenceFactors: ['Battery degradation over time'],
+                recommendedUpgrades: ['USB-C to Lightning adapter for older accessories']
+            },
+            {
+                id: 'samsung-galaxy-s23-ultra',
+                type: 'Smartphone',
+                brand: 'Samsung',
+                model: 'Galaxy S23 Ultra',
+                releaseYear: 2023,
+                ports: ['USB-C'],
+                wirelessStandards: ['Wi-Fi 6E', 'Bluetooth 5.3'],
+                osCompatibility: ['Android 13+'],
+                notes: "Flagship Android phone with a great display and camera.",
+                futureProofingScore: 90,
+                obsolescenceFactors: ['Battery degradation over time'],
+                recommendedUpgrades: ['USB-C hub for expanded connectivity']
+            },
+            // Peripheral
+            {
+                id: 'logitech-mx-master-3s',
+                type: 'Peripheral',
+                brand: 'Logitech',
+                model: 'MX Master 3S',
+                releaseYear: 2022,
+                ports: ['USB-C (for charging)'],
+                wirelessStandards: ['Bluetooth', 'Logi Bolt'],
+                osCompatibility: ['Universal'],
+                notes: "Advanced wireless mouse with multi-device support.",
+                futureProofingScore: 98,
+                obsolescenceFactors: [],
+                recommendedUpgrades: []
+            },
+            // GPU
+            {
+                id: 'nvidia-rtx-4080',
+                type: 'GPU',
+                brand: 'NVIDIA',
+                model: 'RTX 4080',
+                releaseYear: 2022,
+                ports: ['HDMI 2.1', 'DisplayPort 1.4a'],
+                wirelessStandards: [],
+                osCompatibility: ['Windows', 'Linux'],
+                notes: "High-end graphics card for 4K gaming and creative work.",
+                futureProofingScore: 95,
+                obsolescenceFactors: [],
+                recommendedUpgrades: []
+            },
         ];
 
-        // --- Helper function to show a message modal ---
-        function showMessage(title, message) {
-            modalTitle.textContent = title;
-            modalMessage.textContent = message;
-            modal.classList.remove('hidden');
-        }
+        // --- Global State and Constants ---
+        const contentDiv = document.getElementById('contentDiv');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const messageModal = document.getElementById('messageModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalCloseButton = document.getElementById('modalCloseButton');
+        const replaceDeviceModal = document.getElementById('replaceDeviceModal');
+        const replaceModalContent = document.getElementById('replaceModalContent');
+        const replaceDevice1Btn = document.getElementById('replaceDevice1Btn');
+        const replaceDevice2Btn = document.getElementById('replaceDevice2Btn');
+        const cancelReplaceBtn = document.getElementById('cancelReplaceBtn');
+        let selectedDevices = [];
+        let affiliateProducts = []; // To hold the loaded product data
 
-        function hideMessage() {
-            modal.classList.add('hidden');
-        }
+        // --- Helper Functions ---
 
-        // --- UI Rendering Functions ---
-        function renderSection(sectionId) {
-            sections.forEach(section => {
-                section.classList.remove('active');
-            });
-            const activeSection = document.getElementById(sectionId);
-            if (activeSection) {
-                activeSection.classList.add('active');
-            }
-            navLinks.forEach(link => {
-                if (link.getAttribute('href').substring(1) === sectionId) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
+        /**
+         * Fetches JSON data from a given path.
+         * @param {string} path The path to the JSON file.
+         * @returns {Promise<object>} A promise that resolves to the parsed JSON object.
+         */
+        async function fetchJson(path) {
+            try {
+                const response = await fetch(path);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            });
+                return await response.json();
+            } catch (e) {
+                console.error(`Could not fetch data from ${path}:`, e);
+                return null;
+            }
         }
 
-        function renderRoadmap(data) {
-            const roadmapStepsContainer = document.getElementById('roadmap-steps-container');
-            roadmapStepsContainer.innerHTML = ''; // Clear previous content
+        /**
+         * Displays a modal message to the user.
+         * @param {string} message The message to display.
+         */
+        function showMessage(message) {
+            modalMessage.textContent = message;
+            messageModal.classList.remove('hidden');
+            // Animate the modal content
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
 
-            data.forEach((step, index) => {
-                const statusColor = {
-                    "completed": "bg-green-100 border-green-500",
-                    "in-progress": "bg-blue-100 border-blue-500",
-                    "pending": "bg-gray-100 border-gray-300"
-                }[step.status];
+        /**
+         * Hides the modal message.
+         */
+        function hideMessage() {
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                messageModal.classList.add('hidden');
+            }, 300);
+        }
 
-                const statusIcon = {
-                    "completed": `<svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>`,
-                    "in-progress": `<svg class="w-6 h-6 text-blue-600 animate-pulse" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z" clip-rule="evenodd"></path></svg>`,
-                    "pending": `<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>`
-                }[step.status];
+        /**
+         * Renders the product cards for a given array of product IDs.
+         * @param {Array<string>} productIds An array of product IDs to render.
+         */
+        function renderProductCards(productIds) {
+            const productsContainer = document.getElementById('products-container');
+            if (!productsContainer) {
+                console.error('products-container not found.');
+                return;
+            }
 
-                const stepCard = document.createElement('div');
-                stepCard.className = `p-6 rounded-lg border-l-4 shadow-sm ${statusColor}`;
-                stepCard.innerHTML = `
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0">${statusIcon}</div>
-                        <div>
-                            <h4 class="text-lg font-semibold text-gray-900">${step.title}</h4>
-                            <p class="text-gray-700">${step.description}</p>
+            productsContainer.innerHTML = ''; // Clear previous products
+
+            if (!affiliateProducts || affiliateProducts.length === 0) {
+                 productsContainer.innerHTML = '<p class="text-gray-500 text-center col-span-full">No products found.</p>';
+                 return;
+            }
+
+            if (productIds && productIds.length > 0) {
+                productIds.forEach(productId => {
+                    const product = affiliateProducts.find(p => p.id === productId);
+                    if (product) {
+                        const productCard = document.createElement('div');
+                        productCard.className = 'product-card bg-white p-4 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all';
+                        productCard.innerHTML = `
+                            <img src="${product.image_url}" alt="${product.name}" class="rounded-lg mb-4 w-full h-32 object-contain bg-gray-100">
+                            <h4 class="text-md font-semibold text-gray-900 mb-2">${product.name}</h4>
+                            <p class="text-sm text-gray-600 line-clamp-3 mb-4">${product.description}</p>
+                            <a href="${product.affiliate_link}" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                Buy Now
+                            </a>
+                        `;
+                        productsContainer.appendChild(productCard);
+                    }
+                });
+            } else {
+                productsContainer.innerHTML = '<p class="text-gray-500 text-center col-span-full">No recommended products for this roadmap.</p>';
+            }
+        }
+
+        /**
+         * Renders the Compatibility Checker page.
+         */
+        function renderChecker() {
+            contentDiv.innerHTML = `
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h2 class="text-3xl font-bold mb-2">Device Compatibility Checker</h2>
+                        <p class="text-lg text-gray-500">Select two devices to check for compatibility and potential upgrade paths.</p>
+                    </div>
+
+                    <div id="device-selection-area" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <!-- Device 1 Selection -->
+                        <div id="device1-card" class="bg-white p-6 rounded-xl shadow-md border-2 border-dashed border-gray-300 flex items-center justify-center h-48 card-hover-effect">
+                            <span class="text-gray-400 font-medium">Select Device 1</span>
+                        </div>
+                        <!-- Device 2 Selection -->
+                        <div id="device2-card" class="bg-white p-6 rounded-xl shadow-md border-2 border-dashed border-gray-300 flex items-center justify-center h-48 card-hover-effect">
+                            <span class="text-gray-400 font-medium">Select Device 2</span>
                         </div>
                     </div>
-                    ${step.products && step.products.length > 0 ? `<p class="mt-4 text-gray-700"><strong>Mock Recommended Products:</strong> ${step.products.join(', ')}</p>` : ''}
-                `;
-                roadmapStepsContainer.appendChild(stepCard);
-            });
+
+                    <!-- Compatibility and Recommended Products Section -->
+                    <div id="results-area" class="hidden">
+                        <div id="compatibility-results" class="bg-white p-6 rounded-xl shadow-md mb-8">
+                            <h3 class="text-2xl font-bold mb-4 text-gray-800">Compatibility Results</h3>
+                            <div id="results-text" class="text-gray-700"></div>
+                        </div>
+
+                        <div id="recommended-products" class="bg-white p-6 rounded-xl shadow-md">
+                            <h3 class="text-2xl font-bold mb-4 text-gray-800">Recommended Products</h3>
+                            <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <!-- Product cards will be dynamically loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Device Catalog -->
+                    <div id="device-catalog" class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-2xl font-bold mb-4">Device Catalog</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${deviceData.map(device => `
+                                <div class="bg-gray-100 p-4 rounded-xl shadow cursor-pointer card-hover-effect" onclick="selectDevice('${device.id}')">
+                                    <h4 class="text-lg font-semibold">${device.brand} ${device.model}</h4>
+                                    <p class="text-sm text-gray-500">${device.type} (${device.releaseYear})</p>
+                                    <p class="text-sm text-gray-700 mt-2">${device.notes}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
-        // --- Core Logic for Compatibility Checker (UPDATED) ---
+        /**
+         * Renders the Home page.
+         */
+        function renderHome() {
+            contentDiv.innerHTML = `
+                <div class="space-y-8">
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <h2 class="text-4xl font-bold text-gray-900 mb-4">Welcome to Compatify!</h2>
+                        <p class="text-lg text-gray-600 mb-6">Your ultimate tool for understanding and managing the compatibility and lifecycle of your tech devices.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="p-6 bg-gray-50 rounded-lg shadow-inner card-hover-effect cursor-pointer" onclick="renderSection('checker')">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-2">Compatibility Checker</h3>
+                                <p class="text-gray-600">Quickly check if two devices are compatible and get instant recommendations.</p>
+                            </div>
+                            <div class="p-6 bg-gray-50 rounded-lg shadow-inner card-hover-effect cursor-pointer" onclick="renderSection('roadmap')">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-2">Upgrade Roadmap</h3>
+                                <p class="text-gray-600">Get a personalized, step-by-step plan for your next tech upgrade.</p>
+                            </div>
+                            <div class="p-6 bg-gray-50 rounded-lg shadow-inner card-hover-effect cursor-pointer" onclick="renderSection('obsolescence')">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-2">Obsolescence Report</h3>
+                                <p class="text-gray-600">Understand the future-proofing score and risks for your devices.</p>
+                            </div>
+                        </div>
+                    </div>
 
-        // The API key is provided by the canvas environment.
-        const apiKey = ""; 
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">How It Works</h3>
+                        <ol class="list-decimal list-inside space-y-4 text-gray-700">
+                            <li><strong class="font-semibold">Select Your Devices:</strong> Navigate to the "Compatibility Checker" and choose the devices you own or are considering.</li>
+                            <li><strong class="font-semibold">Get AI-Powered Insights:</strong> Our advanced AI will analyze ports, wireless standards, and other factors.</li>
+                            <li><strong class="font-semibold">Receive a Plan:</strong> Get a detailed report, an upgrade roadmap, and links to recommended products.</li>
+                        </ol>
+                    </div>
+                </div>
+            `;
+        }
 
-        // Function to call the LLM and get a list of compatibility tags
-        async function getTagsFromLLM(description) {
-            const prompt = `Given the following device description, identify a list of technical specifications and compatibility keywords. Respond with a JSON array of strings. For example, for 'Hiearcool USB C Hub', the response could be ['USB-C', 'HDMI', '4K', 'USB 3.0', '100W Power Delivery']. Device description: ${description}`;
+        /**
+         * Renders the My Tech Inventory page.
+         */
+        function renderInventory() {
+             contentDiv.innerHTML = `
+                <div class="space-y-8">
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-2">My Tech Inventory</h2>
+                        <p class="text-lg text-gray-500 mb-6">Manage a list of all your devices and their key specifications here.</p>
+                        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg" role="alert">
+                            <p class="font-bold">Coming Soon!</p>
+                            <p>This feature is under development. In a future update, you'll be able to save your devices and get personalized insights.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the Obsolescence Report page.
+         */
+        function renderObsolescence() {
+            contentDiv.innerHTML = `
+                <div class="space-y-8">
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-2">Obsolescence Report</h2>
+                        <p class="text-lg text-gray-500 mb-6">Analyze your device's future-proofing score and identify key obsolescence risks.</p>
+                        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg" role="alert">
+                            <p class="font-bold">Coming Soon!</p>
+                            <p>This section will provide a detailed report on the longevity of your tech devices based on industry standards and trends.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the Upgrade Roadmap page.
+         */
+        function renderRoadmap() {
+             contentDiv.innerHTML = `
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h2 class="text-3xl font-bold mb-2">Upgrade Roadmap Generator</h2>
+                        <p class="text-lg text-gray-500">Provide details about a device and your upgrade goal to get a step-by-step plan.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-2xl font-bold mb-4">Input Your Upgrade Scenario</h3>
+                        <form id="roadmap-form" class="space-y-4">
+                            <div>
+                                <label for="current-device" class="block text-sm font-medium text-gray-700">Current Device</label>
+                                <input type="text" id="current-device" placeholder="e.g., Apple MacBook Pro 2018" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="upgrade-goal" class="block text-sm font-medium text-gray-700">Upgrade Goal</label>
+                                <input type="text" id="upgrade-goal" placeholder="e.g., Connect a 4K 144Hz monitor" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:bg-blue-700 transition-colors">
+                                Generate Roadmap
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Roadmap Results and Recommended Products -->
+                    <div id="roadmap-results-area" class="hidden">
+                         <div id="roadmap-steps-container" class="space-y-6">
+                            <!-- Roadmap steps will be dynamically inserted here -->
+                         </div>
+                    </div>
+                </div>
+            `;
+
+            // Event listener for the roadmap form submission
+            document.getElementById('roadmap-form').addEventListener('submit', generateRoadmap);
+        }
+
+        /**
+         * Renders the Monetization page.
+         */
+        function renderMonetization() {
+            contentDiv.innerHTML = `
+                <div class="space-y-8">
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-2">Monetization</h2>
+                        <p class="text-lg text-gray-500 mb-6">This section outlines the strategy for generating revenue from Compatify.</p>
+
+                        <div class="space-y-6 text-gray-700">
+                            <div>
+                                <h3 class="text-2xl font-semibold text-gray-800 mb-2">1. Affiliate Links</h3>
+                                <p>We plan to integrate affiliate links for products recommended by the AI. When a user clicks a "Buy Now" link and makes a purchase, we will earn a commission. This is a non-intrusive and value-added way to monetize the service, directly connecting users with solutions they need.</p>
+                                <p class="mt-2 text-sm text-gray-500">Example: A user gets a compatibility report and is recommended a specific USB-C hub. The link to this hub will be an Amazon affiliate link.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-semibold text-gray-800 mb-2">2. Contextual Advertising</h3>
+                                <p>Contextual ads can be displayed on relevant pages without disrupting the user experience. For instance, an ad for a new SSD might appear on the "Upgrade Roadmap" page for a user looking to expand storage.</p>
+                                <p class="mt-2 text-sm text-gray-500">We will use services like Google AdSense to place these ads.</p>
+                            </div>
+                             <div>
+                                <h3 class="text-2xl font-semibold text-gray-800 mb-2">3. Premium Features (Subscription Model)</h3>
+                                <p>A future monetization strategy could involve a subscription model for premium features, such as:</p>
+                                <ul class="list-disc list-inside mt-2 space-y-1">
+                                    <li>Saving multiple device inventories.</li>
+                                    <li>Advanced obsolescence reports with predictive analytics.</li>
+                                    <li>Priority access to new features and product recommendations.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- Core Logic Functions ---
+
+        /**
+         * Selects a device and updates the UI.
+         * @param {string} deviceId The ID of the device to select.
+         */
+        function selectDevice(deviceId) {
+            const device = deviceData.find(d => d.id === deviceId);
+            if (!device) return;
+
+            if (selectedDevices.length < 2) {
+                selectedDevices.push(device);
+                updateSelectedDevicesUI();
+                if (selectedDevices.length === 2) {
+                    checkCompatibility();
+                }
+            } else {
+                showReplaceDeviceModal(device);
+            }
+        }
+
+        /**
+         * Updates the UI to show the selected devices.
+         */
+        function updateSelectedDevicesUI() {
+            const device1Card = document.getElementById('device1-card');
+            const device2Card = document.getElementById('device2-card');
+
+            // Reset the cards
+            device1Card.innerHTML = `<span class="text-gray-400 font-medium">Select Device 1</span>`;
+            device1Card.className = 'bg-white p-6 rounded-xl shadow-md border-2 border-dashed border-gray-300 flex items-center justify-center h-48 card-hover-effect';
+            device2Card.innerHTML = `<span class="text-gray-400 font-medium">Select Device 2</span>`;
+            device2Card.className = 'bg-white p-6 rounded-xl shadow-md border-2 border-dashed border-gray-300 flex items-center justify-center h-48 card-hover-effect';
+
+            if (selectedDevices[0]) {
+                device1Card.innerHTML = `
+                    <div class="text-center">
+                        <h4 class="text-lg font-semibold">${selectedDevices[0].brand} ${selectedDevices[0].model}</h4>
+                        <p class="text-sm text-gray-500">${selectedDevices[0].type} (${selectedDevices[0].releaseYear})</p>
+                    </div>
+                `;
+                device1Card.className = 'bg-blue-50 p-6 rounded-xl shadow-lg border-2 border-blue-400 flex items-center justify-center h-48 card-hover-effect';
+            }
+            if (selectedDevices[1]) {
+                device2Card.innerHTML = `
+                    <div class="text-center">
+                        <h4 class="text-lg font-semibold">${selectedDevices[1].brand} ${selectedDevices[1].model}</h4>
+                        <p class="text-sm text-gray-500">${selectedDevices[1].type} (${selectedDevices[1].releaseYear})</p>
+                    </div>
+                `;
+                device2Card.className = 'bg-blue-50 p-6 rounded-xl shadow-lg border-2 border-blue-400 flex items-center justify-center h-48 card-hover-effect';
+            }
+        }
+
+        /**
+         * Checks compatibility between the two selected devices.
+         */
+        function checkCompatibility() {
+            if (selectedDevices.length < 2) {
+                showMessage("Please select two devices to check compatibility.");
+                return;
+            }
+
+            const device1 = selectedDevices[0];
+            const device2 = selectedDevices[1];
+
+            const resultsArea = document.getElementById('results-area');
+            const resultsText = document.getElementById('results-text');
+            const productsContainer = document.getElementById('products-container');
+
+            resultsArea.classList.remove('hidden');
+            resultsText.innerHTML = `<p class="text-lg font-semibold mb-2">Checking compatibility between ${device1.model} and ${device2.model}...</p>`;
+            productsContainer.innerHTML = `<p class="text-gray-500 text-center col-span-full">Analyzing...</p>`;
+
+            // Simple mock compatibility check
+            const commonPorts = device1.ports.filter(port1 => device2.ports.some(port2 => port2.includes(port1.split(' ')[0])));
+            const commonWireless = device1.wirelessStandards.filter(w1 => device2.wirelessStandards.includes(w1));
+
+            let compatibilityMessage = `
+                <p class="mb-4"><strong>Compatibility between ${device1.model} and ${device2.model}:</strong></p>
+                <ul class="list-disc list-inside space-y-1">
+            `;
+
+            if (commonPorts.length > 0) {
+                compatibilityMessage += `<li><strong class="text-green-600">✅ Compatible Ports:</strong> They share ${commonPorts.join(', ')}.</li>`;
+            } else {
+                compatibilityMessage += `<li><strong class="text-red-600">❌ No Common Ports:</strong> Direct connection may require an adapter.</li>`;
+            }
+
+            if (commonWireless.length > 0) {
+                compatibilityMessage += `<li><strong class="text-green-600">✅ Compatible Wireless Standards:</strong> They share ${commonWireless.join(', ')}.</li>`;
+            } else {
+                compatibilityMessage += `<li><strong class="text-yellow-600">⚠️ No Common Wireless Standards:</strong> Bluetooth or Wi-Fi connectivity may be limited.</li>`;
+            }
+
+            // Simple mock recommendation logic
+            const allTags = [...device1.ports.map(p => p.split(' ')[0]), ...device2.ports.map(p => p.split(' ')[0]), ...device1.wirelessStandards, ...device2.wirelessStandards];
+            const uniqueTags = [...new Set(allTags)];
+            const recommendedProductIds = affiliateProducts
+                .filter(p => p.compatibility_tags.some(tag => uniqueTags.includes(tag)))
+                .map(p => p.id)
+                .slice(0, 3);
+
+            compatibilityMessage += `</ul>`;
+            resultsText.innerHTML = compatibilityMessage;
+            renderProductCards(recommendedProductIds);
+        }
+
+        /**
+         * Generates a dynamic upgrade roadmap based on user input.
+         * This function now uses the Gemini API directly.
+         */
+        async function generateRoadmap(event) {
+            event.preventDefault(); // Prevent form submission
+            const currentDevice = document.getElementById('current-device').value;
+            const upgradeGoal = document.getElementById('upgrade-goal').value;
+            const roadmapResultsArea = document.getElementById('roadmap-results-area');
+            const roadmapStepsContainer = document.getElementById('roadmap-steps-container');
+
+            if (!currentDevice || !upgradeGoal) {
+                showMessage("Please fill out both fields to generate a roadmap.");
+                return;
+            }
+
+            // Show loading state
+            roadmapResultsArea.classList.remove('hidden');
+            roadmapStepsContainer.innerHTML = `
+                <div class="flex flex-col items-center justify-center p-8 bg-white rounded-xl shadow-md text-gray-500">
+                    <svg class="animate-spin -ml-1 mr-3 h-8 w-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p class="mt-4 text-lg font-medium">Generating your personalized roadmap...</p>
+                    <p class="text-sm">This may take a moment.</p>
+                </div>
+            `;
+
+            const prompt = `Generate a step-by-step upgrade roadmap for the following scenario: Current Device - "${currentDevice}", Upgrade Goal - "${upgradeGoal}". The roadmap should be a maximum of 5 steps. Provide the output as a JSON array of objects. Each object should have three properties: "stepName" (a string for the step title), "explanation" (a string explaining the step), and "products" (an array of strings with up to 3 product names that are relevant for this step). The product names should be generic but descriptive, e.g., "USB-C hub with HDMI", not specific brands.`;
 
             let chatHistory = [];
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-            
+
             const payload = {
                 contents: chatHistory,
                 generationConfig: {
                     responseMimeType: "application/json",
                     responseSchema: {
                         type: "ARRAY",
-                        items: { "type": "STRING" }
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                "stepName": { "type": "STRING" },
+                                "explanation": { "type": "STRING" },
+                                "products": { "type": "ARRAY", "items": { "type": "STRING" } }
+                            },
+                            "propertyOrdering": ["stepName", "explanation", "products"]
+                        }
                     }
                 }
             };
-            
+            const apiKey = "";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            
-            // Implement exponential backoff for API calls
-            const maxRetries = 5;
-            let retryCount = 0;
-            while (retryCount < maxRetries) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
 
-                    if (!response.ok) {
-                        throw new Error(`API Error: ${response.statusText}`);
-                    }
+            try {
+                const response = await fetch(apiUrl, {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify(payload)
+                });
 
-                    const result = await response.json();
-                    
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        const jsonString = result.candidates[0].content.parts[0].text;
-                        const parsedJson = JSON.parse(jsonString);
-                        // Ensure the result is an array of strings
-                        if (Array.isArray(parsedJson) && parsedJson.every(item => typeof item === 'string')) {
-                            return parsedJson;
-                        } else {
-                            throw new Error('Unexpected JSON format from API.');
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (!jsonText) {
+                     throw new Error("Invalid response from API.");
+                }
+
+                const roadmap = JSON.parse(jsonText);
+
+                // Clear loading state
+                roadmapStepsContainer.innerHTML = '';
+
+                // Render the roadmap steps
+                if (Array.isArray(roadmap) && roadmap.length > 0) {
+                    roadmap.forEach((step, index) => {
+                        const stepCard = document.createElement('div');
+                        stepCard.className = 'bg-white p-6 rounded-xl shadow-md border border-gray-200';
+                        stepCard.innerHTML = `
+                            <h4 class="text-2xl font-bold text-gray-900 mb-2">${index + 1}. ${step.stepName}</h4>
+                            <p class="text-gray-700 mb-4">${step.explanation}</p>
+                            ${step.products && step.products.length > 0 ? `
+                                <div class="mt-4">
+                                    <h5 class="font-semibold text-gray-800 mb-2">Recommended Products:</h5>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="products-for-step-${index}">
+                                        <!-- Products will be rendered here -->
+                                    </div>
+                                </div>
+                            ` : ''}
+                        `;
+                        roadmapStepsContainer.appendChild(stepCard);
+
+                        // Render the products for this step
+                        if (step.products && step.products.length > 0) {
+                            const productContainer = document.getElementById(`products-for-step-${index}`);
+                            step.products.forEach(productName => {
+                                // Find the product from our local data by checking if the name includes the generic product name
+                                const product = affiliateProducts.find(p => p.name.includes(productName));
+                                if (product) {
+                                    const productCard = document.createElement('div');
+                                    productCard.className = 'bg-gray-100 p-4 rounded-lg shadow-inner';
+                                    productCard.innerHTML = `
+                                        <p class="font-medium text-gray-900">${product.name}</p>
+                                        <a href="${product.affiliate_link}" target="_blank" rel="noopener noreferrer" class="text-sm text-blue-600 hover:text-blue-800 transition-colors">View on Amazon</a>
+                                    `;
+                                    productContainer.appendChild(productCard);
+                                }
+                            });
                         }
-                    } else {
-                        throw new Error('No content found in API response.');
-                    }
-                } catch (error) {
-                    console.error(`Attempt ${retryCount + 1} failed: ${error.message}`);
-                    if (retryCount < maxRetries - 1) {
-                        await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount) * 1000));
-                        retryCount++;
-                    } else {
-                        throw error;
-                    }
+                    });
+                } else {
+                    roadmapStepsContainer.innerHTML = `
+                        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg" role="alert">
+                            <p class="font-bold">No Roadmap Generated</p>
+                            <p>The AI could not generate a roadmap for your request. Please try a different scenario.</p>
+                        </div>
+                    `;
                 }
-            }
-            throw new Error('Failed to get tags from LLM after multiple retries.');
-        }
 
-        // Function to check compatibility based on tags
-        function checkCompatibility(device1Tags, device2Tags) {
-            // Ensure inputs are arrays
-            if (!Array.isArray(device1Tags) || !Array.isArray(device2Tags)) {
-                console.error('Inputs to checkCompatibility must be arrays.');
-                return { status: 'error', message: 'Invalid input data.' };
-            }
-            
-            // Convert all tags to lowercase for case-insensitive comparison
-            const lowerDevice1Tags = device1Tags.map(tag => tag.toLowerCase());
-            const lowerDevice2Tags = device2Tags.map(tag => tag.toLowerCase());
-            
-            // Find common tags
-            const sharedTags = lowerDevice1Tags.filter(tag => lowerDevice2Tags.includes(tag));
-            
-            if (sharedTags.length > 0) {
-                return {
-                    status: 'compatible',
-                    message: `The devices are compatible! They share the following tags: ${sharedTags.join(', ')}.`,
-                    sharedTags: sharedTags
-                };
-            } else {
-                return {
-                    status: 'incompatible',
-                    message: 'The devices appear to be incompatible. No common compatibility tags were found.',
-                    sharedTags: []
-                };
+            } catch (error) {
+                console.error('Failed to generate roadmap:', error);
+                 roadmapStepsContainer.innerHTML = `
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg" role="alert">
+                        <p class="font-bold">Error!</p>
+                        <p>An error occurred while generating the roadmap. Please check the console for details and try again.</p>
+                    </div>
+                `;
             }
         }
 
-        // Function to recommend products based on shared tags
-        function recommendProducts(sharedTags) {
-            if (sharedTags.length === 0) {
-                return [];
-            }
+        // --- Router and Initializers ---
 
-            const lowerSharedTags = sharedTags.map(tag => tag.toLowerCase());
-            
-            // Find products that contain at least one of the shared tags
-            const recommended = productData.filter(product => {
-                // Ensure product.compatibility_tags is an array
-                if (!Array.isArray(product.compatibility_tags)) {
-                    return false;
-                }
-                const lowerProductTags = product.compatibility_tags.map(tag => tag.toLowerCase());
-                return lowerSharedTags.some(tag => lowerProductTags.includes(tag));
+        /**
+         * Renders the correct content based on the URL hash.
+         * @param {string} sectionId The ID of the section to render.
+         */
+        function renderSection(sectionId) {
+            // Remove active class from all links
+            navLinks.forEach(link => {
+                link.classList.remove('active-link');
+                link.classList.remove('bg-blue-600', 'text-white');
             });
 
-            return recommended;
-        }
-
-        // Function to render the compatibility results to the UI
-        function renderCompatibilityResults(result) {
-            const resultsContainer = document.getElementById('results-container');
-            const productsContainer = document.getElementById('products-container');
-            const placeholderText = document.getElementById('placeholder-text');
-
-            // Clear previous results and placeholder
-            resultsContainer.innerHTML = '';
-            productsContainer.innerHTML = '';
-            placeholderText.classList.add('hidden');
-            
-            // Show the container
-            resultsContainer.classList.remove('hidden');
-            
-            // Build the new content for compatibility result
-            let content = '';
-            if (result.status === 'compatible') {
-                content = `
-                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md mb-4" role="alert">
-                        <p class="font-bold">Compatible!</p>
-                        <p>${result.message}</p>
-                    </div>
-                `;
-            } else if (result.status === 'incompatible') {
-                content = `
-                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md mb-4" role="alert">
-                        <p class="font-bold">Incompatible!</p>
-                        <p>${result.message}</p>
-                    </div>
-                `;
-            } else {
-                 content = `
-                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md mb-4" role="alert">
-                        <p class="font-bold">Warning!</p>
-                        <p>${result.message}</p>
-                    </div>
-                `;
+            // Add active class to the current link
+            const activeLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active-link');
+                // For mobile nav, ensure the active state is visually distinct
+                 if (window.innerWidth <= 767) {
+                    activeLink.classList.add('bg-blue-600', 'text-white');
+                 }
             }
-            resultsContainer.innerHTML = content;
 
-            // Render recommended products
-            if (result.recommendedProducts && result.recommendedProducts.length > 0) {
-                result.recommendedProducts.forEach(product => {
-                    const productCard = document.createElement('div');
-                    productCard.className = 'bg-gray-100 rounded-lg p-4 shadow-sm flex flex-col items-center text-center';
-                    productCard.innerHTML = `
-                        <img src="${product.image_url}" alt="${product.name}" class="w-24 h-24 object-cover rounded-md mb-4">
-                        <h4 class="font-semibold text-lg mb-2">${product.name}</h4>
-                        <p class="text-sm text-gray-600 mb-4">${product.description.substring(0, 100)}...</p>
-                        <a href="${product.affiliate_link}" target="_blank" class="mt-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200">View Product</a>
-                    `;
-                    productsContainer.appendChild(productCard);
-                });
-            } else {
-                productsContainer.innerHTML = '<p class="text-gray-500 text-center col-span-full">No specific product recommendations found.</p>';
+            // Render the corresponding section
+            switch (sectionId) {
+                case 'home':
+                    renderHome();
+                    break;
+                case 'checker':
+                    renderChecker();
+                    break;
+                case 'inventory':
+                    renderInventory();
+                    break;
+                case 'obsolescence':
+                    renderObsolescence();
+                    break;
+                case 'roadmap':
+                    renderRoadmap();
+                    break;
+                case 'monetization':
+                    renderMonetization();
+                    break;
+                default:
+                    renderHome();
+                    break;
             }
         }
 
-        // --- Event Listeners ---\n
-        const checkerForm = document.getElementById('checker-form');
-        const loadingIndicator = document.getElementById('loading-indicator');
-
-        // Async function to handle the full compatibility check
-        async function runCompatibilityCheck() {
-            const device1Input = document.getElementById('device1-input').value;
-            const device2Input = document.getElementById('device2-input').value;
-
-            // Simple check for empty inputs
-            if (!device1Input || !device2Input) {
-                showMessage('Warning', 'Please enter descriptions for both devices.');
-                return;
-            }
-
-            // Show loading indicator and hide previous content
-            loadingIndicator.classList.remove('hidden');
-            document.getElementById('placeholder-text').classList.add('hidden');
-            document.getElementById('results-container').innerHTML = '';
-            document.getElementById('products-container').innerHTML = '';
-
-            try {
-                // Concurrently get compatibility tags for both devices
-                const [tags1, tags2] = await Promise.all([
-                    getTagsFromLLM(device1Input),
-                    getTagsFromLLM(device2Input)
-                ]);
-
-                // Run the compatibility check
-                const result = checkCompatibility(tags1, tags2);
-
-                // Recommend products based on shared tags
-                if (result.status === 'compatible') {
-                    result.recommendedProducts = recommendProducts(result.sharedTags);
-                }
-
-                // Render the results to the UI
-                renderCompatibilityResults(result);
-
-            } catch (error) {
-                console.error('Error during compatibility check:', error);
-                showMessage('Error', `An error occurred while checking compatibility: ${error.message}`);
-                // Re-show placeholder text on error
-                document.getElementById('placeholder-text').classList.remove('hidden');
-            } finally {
-                // Hide loading indicator
-                loadingIndicator.classList.add('hidden');
-            }
-        }
-
+        // --- Event Listeners ---\
         document.addEventListener('DOMContentLoaded', async () => {
-            // First, fetch the product data
-            try {
-                const response = await fetch('./affiliate_products.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                productData = await response.json();
-            } catch (error) {
-                console.error('Failed to load product data:', error);
-                showMessage('Error', 'Could not load product data. The recommendation feature may not work correctly.');
+            // Load the affiliate products JSON first
+            const productData = await fetchJson(AFFILIATE_PRODUCTS_JSON_PATH);
+            if (productData) {
+                affiliateProducts = productData;
+            } else {
+                 showMessage("Failed to load product data. Check the console for details.");
             }
 
             // Check if a specific section is indicated in the URL hash on initial load
@@ -506,13 +921,10 @@
             if (initialHash) {
                 const sectionId = initialHash.split('?')[0].substring(1);
                 renderSection(sectionId);
-                // Also render the roadmap if the user lands on that section
-                if (sectionId === 'roadmap') {
-                    renderRoadmap(mockRoadmapData);
-                }
             } else {
                 renderSection('home'); // Render homepage on load
             }
+
 
             // Navigation links
             navLinks.forEach(link => {
@@ -522,21 +934,17 @@
                     // Update URL hash without reloading the page
                     window.history.pushState(null, '', link.getAttribute('href'));
                     renderSection(sectionId);
-                    // If navigating to the roadmap, render the mock data
-                    if (sectionId === 'roadmap') {
-                        renderRoadmap(mockRoadmapData);
-                    }
                 });
-            });
-
-            // Compatibility checker form submission listener
-            checkerForm.addEventListener('submit', async (event) => {
-                event.preventDefault(); // Prevent page reload
-                await runCompatibilityCheck();
             });
 
             // Modal close button
             modalCloseButton.addEventListener('click', hideMessage);
+            if (cancelReplaceBtn) {
+                 cancelReplaceBtn.addEventListener('click', () => {
+                    replaceDeviceModal.classList.add('hidden');
+                 });
+            }
+
         });
     </script>
 </body>
