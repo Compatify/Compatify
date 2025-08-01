@@ -328,19 +328,21 @@
         // --- Helper Functions ---
 
         /**
-         * Fetches JSON data from a given path.
+         * Fetches JSON data from a given path with improved error handling.
          * @param {string} path The path to the JSON file.
-         * @returns {Promise<object>} A promise that resolves to the parsed JSON object.
+         * @returns {Promise<object>} A promise that resolves to the parsed JSON object, or null on error.
          */
         async function fetchJson(path) {
             try {
                 const response = await fetch(path);
                 if (!response.ok) {
+                    console.error(`Fetch error: HTTP status ${response.status} for ${path}`);
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                return await response.json();
+                const data = await response.json();
+                return data;
             } catch (e) {
-                console.error(`Could not fetch data from ${path}:`, e);
+                console.error(`Could not fetch or parse data from ${path}:`, e);
                 return null;
             }
         }
@@ -576,42 +578,6 @@
 
             // Event listener for the roadmap form submission
             document.getElementById('roadmap-form').addEventListener('submit', generateRoadmap);
-        }
-
-        /**
-         * Renders the Monetization page.
-         */
-        function renderMonetization() {
-            contentDiv.innerHTML = `
-                <div class="space-y-8">
-                    <div class="bg-white p-8 rounded-xl shadow-md">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-2">Monetization</h2>
-                        <p class="text-lg text-gray-500 mb-6">This section outlines the strategy for generating revenue from Compatify.</p>
-
-                        <div class="space-y-6 text-gray-700">
-                            <div>
-                                <h3 class="text-2xl font-semibold text-gray-800 mb-2">1. Affiliate Links</h3>
-                                <p>We plan to integrate affiliate links for products recommended by the AI. When a user clicks a "Buy Now" link and makes a purchase, we will earn a commission. This is a non-intrusive and value-added way to monetize the service, directly connecting users with solutions they need.</p>
-                                <p class="mt-2 text-sm text-gray-500">Example: A user gets a compatibility report and is recommended a specific USB-C hub. The link to this hub will be an Amazon affiliate link.</p>
-                            </div>
-                            <div>
-                                <h3 class="text-2xl font-semibold text-gray-800 mb-2">2. Contextual Advertising</h3>
-                                <p>Contextual ads can be displayed on relevant pages without disrupting the user experience. For instance, an ad for a new SSD might appear on the "Upgrade Roadmap" page for a user looking to expand storage.</p>
-                                <p class="mt-2 text-sm text-gray-500">We will use services like Google AdSense to place these ads.</p>
-                            </div>
-                             <div>
-                                <h3 class="text-2xl font-semibold text-gray-800 mb-2">3. Premium Features (Subscription Model)</h3>
-                                <p>A future monetization strategy could involve a subscription model for premium features, such as:</p>
-                                <ul class="list-disc list-inside mt-2 space-y-1">
-                                    <li>Saving multiple device inventories.</li>
-                                    <li>Advanced obsolescence reports with predictive analytics.</li>
-                                    <li>Priority access to new features and product recommendations.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
         }
 
         // --- Core Logic Functions ---
